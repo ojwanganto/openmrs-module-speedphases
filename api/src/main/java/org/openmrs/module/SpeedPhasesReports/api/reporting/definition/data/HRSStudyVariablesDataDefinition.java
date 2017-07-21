@@ -13,7 +13,7 @@
  */
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data;
 
-import org.openmrs.module.hrsreports.api.reporting.model.StudyVariableResult;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.model.StudyVariableResult;
 import org.openmrs.module.reporting.data.BaseDataDefinition;
 import org.openmrs.module.reporting.data.person.definition.PersonDataDefinition;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationPropertyCachingStrategy;

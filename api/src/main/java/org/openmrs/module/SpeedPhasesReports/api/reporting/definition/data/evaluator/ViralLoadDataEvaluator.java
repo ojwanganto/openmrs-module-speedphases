@@ -1,8 +1,8 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.hrsreports.api.reporting.definition.data.ViralLoadDataDefinition;
-import org.openmrs.module.hrsreports.api.util.HRSUtil;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ViralLoadDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.util.HRSUtil;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
 import org.openmrs.module.reporting.data.visit.evaluator.VisitDataEvaluator;

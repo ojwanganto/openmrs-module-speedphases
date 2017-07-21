@@ -2,7 +2,7 @@ package org.openmrs.module.SpeedPhasesReports.api.util;
 
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.hrsreports.api.reporting.model.CohortFile;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.model.CohortFile;
 import org.openmrs.util.OpenmrsUtil;
 
 import java.io.BufferedReader;

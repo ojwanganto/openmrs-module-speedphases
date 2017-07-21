@@ -1,8 +1,8 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.hrsreports.api.reporting.query.definition.StudyVisitQuery;
-import org.openmrs.module.hrsreports.api.util.HRSUtil;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.StudyVisitQuery;
+import org.openmrs.module.SpeedPhasesReports.api.util.HRSUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * The logic that evaluates an {@link org.openmrs.module.hrsreports.api.reporting.query.definition.StudyVisitQuery} and produces a {@link VisitQueryResult}
+ * The logic that evaluates an {@link org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.StudyVisitQuery} and produces a {@link VisitQueryResult}
  */
 @Handler(supports=StudyVisitQuery.class)
 public class StudyVisitQueryEvaluator implements VisitQueryEvaluator {
