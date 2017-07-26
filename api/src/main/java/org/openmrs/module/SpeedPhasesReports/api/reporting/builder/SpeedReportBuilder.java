@@ -46,8 +46,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-@Builds({"hrsreports.common.report.hrsstudyvariablereport"})
-public class HRSReportBuilder extends AbstractReportBuilder {
+@Builds({"speedPhasesReports.common.report.speedReport"})
+public class SpeedReportBuilder extends AbstractReportBuilder {
     public static final String DATE_FORMAT = "yyyy-MM-dd";
 
     @Override

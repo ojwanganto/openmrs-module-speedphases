@@ -14,14 +14,14 @@ import static org.openmrs.module.metadatadeploy.bundle.CoreConstructors.role;
  */
 @Component
 @Requires(SecurityMetadata.class)
-public class HRSReportSecurityMetadata extends AbstractMetadataBundle{
+public class ModuleSecurityMetadata extends AbstractMetadataBundle{
 
     public static class _Privilege {
-        public static final String APP_HRS_REPORT = "App: hrsreports.reports";
+        public static final String APP_HRS_REPORT = "App: speedPhases.reports";
     }
 
     public static final class _Role {
-        public static final String APPLICATION_HRS_REPORT = "Application: Configure HRS Report";
+        public static final String APPLICATION_HRS_REPORT = "Application: Configure SpeedPhases Report";
     }
 
     /**
@@ -30,8 +30,8 @@ public class HRSReportSecurityMetadata extends AbstractMetadataBundle{
     @Override
     public void install() {
 
-        install(privilege(_Privilege.APP_HRS_REPORT, "Able to access App for Configuring HRS Report"));
-        install(role(_Role.APPLICATION_HRS_REPORT, "A role for Configuring HRS Report", idSet(
+        install(privilege(_Privilege.APP_HRS_REPORT, "Able to access App for Configuring Speed and Phases Report"));
+        install(role(_Role.APPLICATION_HRS_REPORT, "A role for Configuring Speed and Phases Report", idSet(
                 SecurityMetadata._Role.API_PRIVILEGES_VIEW_AND_EDIT
         ), idSet(
                 _Privilege.APP_HRS_REPORT

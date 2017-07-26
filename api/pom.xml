@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>SpeedPhasesReports</groupId>
+		<groupId>org.openmrs.module</groupId>
 		<artifactId>SpeedPhasesReports</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>

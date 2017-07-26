@@ -52,34 +52,35 @@
 		</property>
 	</bean>
 
-	<bean id="hrsreports.config.report" class="org.openmrs.module.kenyacore.report.ReportConfiguration">
+	<bean id="speedPhasesReports.config.report" class="org.openmrs.module.kenyacore.report.ReportConfiguration">
 		<property name="commonReports">
 			<set>
-				<ref bean="hrsreports.common.report.hrsstudyvariablereport" />
+				<ref bean="speedPhasesReports.common.report.speedReport" />
 			</set>
 		</property>
 	</bean>
 
 
-	<bean id="hrsreports.app.reports" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
-		<constructor-arg value="hrsreports.reports" />
-		<constructor-arg value="HRS Report Configuration" />
-		<constructor-arg value="hrsreports/cohortImport.page" />
-		<constructor-arg value="hrsreports:apps/hrs_report-icon.gif" />
+	<bean id="speedPhasesReports.app.reports" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
+		<constructor-arg value="speedPhases.reports" />
+		<constructor-arg value="Speed and Phases studies Report Configuration" />
+		<constructor-arg value="SpeedPhasesReports/cohortImport.page" />
+		<constructor-arg value="SpeedPhasesReports:apps/hrs_report-icon.gif" />
 		<constructor-arg value="1100000" />
 	</bean>
 
 	<!--Add reports here -->
-	<bean id="hrsreports.common.report.hrsstudyvariablereport" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
-		<property name="targetUuid" value="e2cac59f-2d83-11e5-942f-000c29853f9c" />
-		<property name="name" value="HRS Study Report" />
-		<property name="description" value="Report for HRS Study" />
+	<bean id="speedPhasesReports.common.report.speedReport" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+		<property name="targetUuid" value="68bf24e9-e950-41f2-9246-c9c753c904ed" />
+		<property name="name" value="SPEED study Report" />
+		<property name="description" value="Report for SPEED Study" />
 		<property name="apps">
 			<set>
 				<ref bean="kenyaemr.app.reports" />
 			</set></property>
-		<property name="template" value="hrsreports:hrsreport.xls" />
+		<property name="template" value="SpeedPhasesReports:speedReportTemplate.xls" />
 		<property name="repeatingSection" value="sheet:1,row:6,dataset:VisitInformation" />
 	</bean>
+
 	
 </beans>
