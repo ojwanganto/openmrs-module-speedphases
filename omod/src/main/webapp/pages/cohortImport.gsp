@@ -5,9 +5,9 @@
 
 <div class="ke-page-sidebar">
 
-    ${ ui.includeFragment("hrsreports", "cohortFileUploadDirection") }
+    None
 </div>
 
 <div class="ke-page-content">
-    ${ ui.includeFragment("hrsreports", "uploadFile") }
+   None
 </div>

@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * A pojo that holds study variables from a result set
  */
-public class StudyVariableResult {
+public class SpeedPhasesStudyVariableResult {
 
     private Integer patient;
     private Integer visit;
@@ -16,9 +16,9 @@ public class StudyVariableResult {
     private Double testResult;
     private Date nextVisitDate;
 
-    public StudyVariableResult(){}
+    public SpeedPhasesStudyVariableResult(){}
 
-    public StudyVariableResult(Integer patient, Integer visit, Integer test, Date requestDate, Date dateCreated, Date dateOfTest, Double testResult) {
+    public SpeedPhasesStudyVariableResult(Integer patient, Integer visit, Integer test, Date requestDate, Date dateCreated, Date dateOfTest, Double testResult) {
         this.patient = patient;
         this.visit = visit;
         this.test = test;
@@ -28,7 +28,7 @@ public class StudyVariableResult {
         this.testResult = testResult;
     }
 
-    public StudyVariableResult(Integer patient, Integer visit, Integer test, Date requestDate, Date dateCreated, Date dateOfTest, Double testResult, Date nextVisitDate) {
+    public SpeedPhasesStudyVariableResult(Integer patient, Integer visit, Integer test, Date requestDate, Date dateCreated, Date dateOfTest, Double testResult, Date nextVisitDate) {
         this.patient = patient;
         this.visit = visit;
         this.test = test;

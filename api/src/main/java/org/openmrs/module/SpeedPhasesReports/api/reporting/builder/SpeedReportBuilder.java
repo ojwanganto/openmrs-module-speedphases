@@ -17,7 +17,7 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.builder;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.GenericDateConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.*;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.StudyVisitQuery;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.SpeedPhasesStudyVisitQuery;
 import org.openmrs.module.kenyacore.report.ReportDescriptor;
 import org.openmrs.module.kenyacore.report.ReportUtils;
 import org.openmrs.module.kenyacore.report.builder.AbstractReportBuilder;
@@ -75,17 +75,17 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("EMR ID", new PatientIdDataDefinition(), null);
         dsd.addColumn("Sex", new GenderDataDefinition(), "");
         dsd.addColumn("Unique Patient Number", identifierDef, null);
-        dsd.addColumn("Date Enrolled in Care", new CalculationDataDefinition("DOE", new EnrollmentDateCalculation()), "", new GenericDateConverter());
-        dsd.addColumn("Visit Date", new VisitTestRequestDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
-        dsd.addColumn("Request Date", new VisitTestRequestDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
-        dsd.addColumn("Date of Result", new DateCreatedDataDefinition(), "", new DateConverter(DATE_FORMAT) );
-        dsd.addColumn("Date Created", new DateCreatedDataDefinition(), "", new DateConverter(DATE_FORMAT));
-        dsd.addColumn("CD4", new VisitCD4DataDefinition(), null);
-        dsd.addColumn("Viral Load", new ViralLoadDataDefinition(), null);
-        dsd.addColumn("Next Visit Date", new NextVisitDateDataDefinition(), "", new DateConverter(DATE_FORMAT));
+        dsd.addColumn("Date Enrolled in Care", new CalculationDataDefinition("DOE", new SpeedPhasesEnrollmentDateCalculation()), "", new GenericDateConverter());
+        dsd.addColumn("Visit Date", new SpeedPhasesVisitTestRequestDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
+        dsd.addColumn("Request Date", new SpeedPhasesVisitTestRequestDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
+        dsd.addColumn("Date of Result", new SpeedPhasesDateCreatedDataDefinition(), "", new DateConverter(DATE_FORMAT) );
+        dsd.addColumn("Date Created", new SpeedPhasesDateCreatedDataDefinition(), "", new DateConverter(DATE_FORMAT));
+        dsd.addColumn("CD4", new SpeedPhasesVisitCD4DataDefinition(), null);
+        dsd.addColumn("Viral Load", new SpeedPhasesViralLoadDataDefinition(), null);
+        dsd.addColumn("Next Visit Date", new SpeedPhasesNextVisitDateDataDefinition(), "", new DateConverter(DATE_FORMAT));
         dsd.addColumn("Art Start Date", new CalculationDataDefinition("Art Start Date", new InitialArtStartDateCalculation()), "", new GenericDateConverter());
-        dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new QueryDateCalculation()),"", new GenericDateConverter());
-        dsd.addRowFilter(new StudyVisitQuery(), "");
+        dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new GenericDateConverter());
+        dsd.addRowFilter(new SpeedPhasesStudyVisitQuery(), "");
         return dsd;
 
     }

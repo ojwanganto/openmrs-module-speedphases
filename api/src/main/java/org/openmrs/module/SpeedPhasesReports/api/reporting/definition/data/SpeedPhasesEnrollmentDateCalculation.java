@@ -36,7 +36,7 @@ import java.util.Set;
 /**
  * Calculate the date of enrollment into HIV Program
  */
-public class EnrollmentDateCalculation extends AbstractPatientCalculation {
+public class SpeedPhasesEnrollmentDateCalculation extends AbstractPatientCalculation {
 
 	@Override
 	public CalculationResultMap evaluate(Collection<Integer> cohort, Map<String, Object> parameterValues,

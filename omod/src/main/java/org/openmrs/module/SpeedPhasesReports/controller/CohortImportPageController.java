@@ -8,26 +8,10 @@ import org.openmrs.ui.framework.UiUtils;
 /**
  * Controller class for cohort import page
  */
-@AppPage("hrsreports.reports")
+@AppPage("SpeedPhasesReports.reports")
 public class CohortImportPageController {
 
-    String successPage = "cohortImportSuccess";
-    protected final Log log = LogFactory.getLog(getClass());
-
-    public void get() {
-        System.out.println("This is for get request:::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-    }
-
-  /*  public void post(*//*@RequestParam("cohortFile") MultipartFile cohortFile, UiUtils ui*//*){
-        System.out.println("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRR");
-        log.info("This request is reaching the controller---------------------------------------------------------------------");
-        //return successPage;// "redirect:" + ui.pageLink("hrsreports", successPage, null);
-
-    }*/
-
-    public String post(UiUtils ui){
-        System.out.println("This is for post request:::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-        return "redirect:" + ui.pageLink("hrsreports", successPage, null);
+    public void controller(){
 
     }
 }

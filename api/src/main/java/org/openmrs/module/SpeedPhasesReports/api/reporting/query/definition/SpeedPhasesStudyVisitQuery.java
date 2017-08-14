@@ -15,12 +15,12 @@ import java.util.Date;
  * Date asOfDate: optional, defaults to now()
  */
 @Caching(strategy=ConfigurationPropertyCachingStrategy.class)
-public class StudyVisitQuery extends BaseQuery<Visit> implements VisitQuery {
+public class SpeedPhasesStudyVisitQuery extends BaseQuery<Visit> implements VisitQuery {
 
     @ConfigurationProperty
     private Date asOfDate;
 
-    public StudyVisitQuery() {
+    public SpeedPhasesStudyVisitQuery() {
     }
 
     public Date getAsOfDate() {

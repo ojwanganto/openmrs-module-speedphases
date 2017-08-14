@@ -6,21 +6,21 @@ import java.util.Set;
 /**
  * A class that holds data in cohort csv file
  */
-public class CohortFile {
+public class ModuleCohortFile {
     private Date effectiveDate;
     private Date endDate;
     private Set<Long> patientIds;
 
-    public CohortFile() {
+    public ModuleCohortFile() {
     }
 
-    public CohortFile(Date effectiveDate, Date endDate, Set<Long> patientIds) {
+    public ModuleCohortFile(Date effectiveDate, Date endDate, Set<Long> patientIds) {
         this.effectiveDate = effectiveDate;
         this.endDate = endDate;
         this.patientIds = patientIds;
     }
 
-    public CohortFile(Date effectiveDate, Set<Long> patientIds) {
+    public ModuleCohortFile(Date effectiveDate, Set<Long> patientIds) {
         this.effectiveDate = effectiveDate;
         this.patientIds = patientIds;
     }

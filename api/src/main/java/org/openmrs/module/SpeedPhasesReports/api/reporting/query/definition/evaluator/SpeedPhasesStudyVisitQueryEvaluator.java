@@ -1,8 +1,8 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.StudyVisitQuery;
-import org.openmrs.module.SpeedPhasesReports.api.util.HRSUtil;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.SpeedPhasesStudyVisitQuery;
+import org.openmrs.module.SpeedPhasesReports.api.util.ModuleFileProcessorUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
@@ -17,10 +17,10 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * The logic that evaluates an {@link org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.StudyVisitQuery} and produces a {@link VisitQueryResult}
+ * The logic that evaluates an {@link SpeedPhasesStudyVisitQuery} and produces a {@link VisitQueryResult}
  */
-@Handler(supports=StudyVisitQuery.class)
-public class StudyVisitQueryEvaluator implements VisitQueryEvaluator {
+@Handler(supports=SpeedPhasesStudyVisitQuery.class)
+public class SpeedPhasesStudyVisitQueryEvaluator implements VisitQueryEvaluator {
 
     @Autowired
     EvaluationService evaluationService;
@@ -29,17 +29,17 @@ public class StudyVisitQueryEvaluator implements VisitQueryEvaluator {
         context = ObjectUtil.nvl(context, new EvaluationContext());
         VisitQueryResult queryResult = new VisitQueryResult(definition, context);
 
-        String qry = HRSUtil.getInitialCohortQuery();
+        String qry = ModuleFileProcessorUtil.getInitialCohortQuery();
         SqlQueryBuilder builder = new SqlQueryBuilder();
         builder.append(qry);
-        builder.addParameter("effectiveDate", HRSUtil.getReportEffectiveDate());
-        builder.addParameter("endDate", HRSUtil.getReportEndDate());
-        builder.addParameter("patientIds", HRSUtil.getReportCohort().size()==0? new HashSet<Long>(0):HRSUtil.getReportCohort());
+        builder.addParameter("effectiveDate", ModuleFileProcessorUtil.getDefaultDate());
+        builder.addParameter("endDate", ModuleFileProcessorUtil.getDefaultEndDate());
+        builder.addParameter("patientIds", ModuleFileProcessorUtil.defaultCohort());
 
         List<Integer> results = evaluationService.evaluateToList(builder, Integer.class, context);
         queryResult.getMemberIds().addAll(results);
-        System.out.println("Effective date: ==============================" + HRSUtil.getReportEffectiveDate());
-        System.out.println("End Date: ==============================" + HRSUtil.getReportEndDate());
+        System.out.println("Effective date: ==============================" + ModuleFileProcessorUtil.getDefaultDate());
+        System.out.println("End Date: ==============================" + ModuleFileProcessorUtil.getDefaultEndDate());
         System.out.println("Completed processing visit query: Total visits: " + results.size());
         return queryResult;
     }

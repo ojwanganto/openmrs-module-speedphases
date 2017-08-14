@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ModuleReportMetadata extends AbstractMetadataBundle {
 
-	public static final String MODULE_ID = "hrsreports";
+	public static final String MODULE_ID = "SpeedPhasesReports";
 	public static final String DEFAULT_COHORT = MODULE_ID + ".default_cohort";
 	private String defaultConfig = "";
 

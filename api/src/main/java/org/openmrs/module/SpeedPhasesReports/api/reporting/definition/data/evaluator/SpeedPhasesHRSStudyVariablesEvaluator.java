@@ -17,7 +17,7 @@ import java.util.TreeMap;
  * Evaluator for HRSStudyVariables
  */
 
-public class HRSStudyVariablesEvaluator implements PersonDataEvaluator {
+public class SpeedPhasesHRSStudyVariablesEvaluator implements PersonDataEvaluator {
 
     @Override
     public EvaluatedPersonData evaluate(final PersonDataDefinition definition, final EvaluationContext context) throws EvaluationException {

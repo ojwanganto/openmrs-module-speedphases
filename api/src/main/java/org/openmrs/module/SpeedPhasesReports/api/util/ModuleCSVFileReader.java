@@ -2,7 +2,7 @@ package org.openmrs.module.SpeedPhasesReports.api.util;
 
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.model.CohortFile;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.model.ModuleCohortFile;
 import org.openmrs.util.OpenmrsUtil;
 
 import java.io.BufferedReader;
@@ -18,14 +18,14 @@ import java.util.Set;
 /**
  * csv file reader
  */
-public class CSVFileReader {
+public class ModuleCSVFileReader {
     private static final String COMMA_DELIMITER = ",";
     private static final int EFFECTIVE_DATE_INDEX = 0;
 
-    public CohortFile readCSVFile (String fileName) {
+    public ModuleCohortFile readCSVFile (String fileName) {
 
         AdministrationService as = Context.getAdministrationService();
-        String folderName = as.getGlobalProperty("hrsreports.cohort_file_dir");
+        String folderName = as.getGlobalProperty("SpeedPhasesReports.cohort_file_dir");
 
         String csvFilename = "testCohort.csv";
         File loaddir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
@@ -43,7 +43,7 @@ public class CSVFileReader {
         }
 
         String line;
-        CohortFile cohortFile = new CohortFile();
+        ModuleCohortFile cohortFile = new ModuleCohortFile();
         Set<Long> ids = new HashSet<Long>();
 
         try {

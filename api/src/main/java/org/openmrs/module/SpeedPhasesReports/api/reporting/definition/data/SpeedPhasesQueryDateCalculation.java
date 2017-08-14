@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * Returns date when query is run
  */
-public class QueryDateCalculation extends AbstractPatientCalculation {
+public class SpeedPhasesQueryDateCalculation extends AbstractPatientCalculation {
 
 	@Override
 	public CalculationResultMap evaluate(Collection<Integer> cohort, Map<String, Object> parameterValues,

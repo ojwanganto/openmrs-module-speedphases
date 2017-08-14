@@ -2,7 +2,7 @@ package org.openmrs.module.SpeedPhasesReports.api.util;
 
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.model.CohortFile;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.model.ModuleCohortFile;
 import org.openmrs.module.kenyaemr.api.KenyaEmrService;
 import org.openmrs.util.OpenmrsUtil;
 
@@ -23,10 +23,11 @@ import java.util.Set;
 /**
  * Util class for HRSReports
  */
-public class HRSUtil {
+public class ModuleFileProcessorUtil {
     private static final String COMMA_DELIMITER = ",";
     private static final int EFFECTIVE_DATE_INDEX = 0;
     private static final int END_DATE_INDEX = 1;
+
     public static Set<Long> getReportCohort() {
         if (processCSVFile() == null)
             return defaultCohort();
@@ -58,10 +59,13 @@ public class HRSUtil {
 
     }
 
-    private static CohortFile processCSVFile () {
+    private static ModuleCohortFile processCSVFile () {
 
         AdministrationService as = Context.getAdministrationService();
-        String folderName = as.getGlobalProperty("hrsreports.cohort_file_dir");
+        String folderName = as.getGlobalProperty("SpeedPhasesReports.cohort_file_dir");
+
+        if (folderName == null)
+            return null;
         String csvFilename = "testCohort.csv";
         File loaddir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(folderName);
         File csvFile = new File(loaddir, csvFilename);
@@ -76,7 +80,7 @@ public class HRSUtil {
             e.printStackTrace();
         }
         String line;
-        CohortFile cohortFile = new CohortFile();
+        ModuleCohortFile cohortFile = new ModuleCohortFile();
         Set<Long> ids = new HashSet<Long>();
 
         try {
@@ -108,7 +112,7 @@ public class HRSUtil {
         return cohortFile;
     }
 
-    private static Set<Long> defaultCohort() {
+    public static Set<Long> defaultCohort() {
         String qry = "select pi.identifier from visit v "
                 + " inner join encounter e on e.visit_id=v.visit_id and e.voided=0 and e.encounter_type in(7,8) "
                 + " inner join patient_identifier pi on pi.patient_id=v.patient_id and pi.identifier_type=3 "
@@ -127,14 +131,14 @@ public class HRSUtil {
         return idSet;
     }
 
-    private static Date getDefaultDate () {
+    public static Date getDefaultDate () {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, -1);
         Date defaultDate = cal.getTime();
         return defaultDate;
     }
 
-    private static Date getDefaultEndDate () {
+    public static Date getDefaultEndDate () {
         return new Date();
     }
 

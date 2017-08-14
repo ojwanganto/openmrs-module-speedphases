@@ -9,21 +9,21 @@ import org.openmrs.module.reporting.evaluation.caching.Caching;
  * Visit ID Column
  */
 @Caching(strategy=ConfigurationPropertyCachingStrategy.class)
-public class NextVisitDateDataDefinition extends BaseDataDefinition implements VisitDataDefinition {
+public class SpeedPhasesViralLoadDataDefinition extends BaseDataDefinition implements VisitDataDefinition {
 
     public static final long serialVersionUID = 1L;
 
     /**
      * Default Constructor
      */
-    public NextVisitDateDataDefinition() {
+    public SpeedPhasesViralLoadDataDefinition() {
         super();
     }
 
     /**
      * Constructor to populate name only
      */
-    public NextVisitDateDataDefinition(String name) {
+    public SpeedPhasesViralLoadDataDefinition(String name) {
         super(name);
     }
 
