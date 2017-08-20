@@ -27,12 +27,13 @@ public class SpeedPhasesPregnancyStatusDataEvaluator implements VisitDataEvaluat
     public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
 
-        String qry = "select v.visit_id, o.value_coded"
+        String qry = "select v.visit_id, cn.name"
                         + " from visit v "
                         + " inner join encounter e on e.visit_id = v.visit_id "
                         + " inner join obs o on o.encounter_id = e.encounter_id and o.voided=0 "
-                        + " where o.concept_id in(5272) ";
-                        //+ " and v.date_started > :startDate  ";
+                        + "left outer join concept_name cn on cn.concept_id=o.value_coded  and cn.concept_name_type='FULLY_SPECIFIED'\n" +
+                "    and cn.locale='en'\n"
+                        + " where o.concept_id = 5272 ";
 
         //we want to restrict visits to those for patients in question
         qry = qry + " and v.visit_id in (";
@@ -46,7 +47,7 @@ public class SpeedPhasesPregnancyStatusDataEvaluator implements VisitDataEvaluat
         queryBuilder.addParameter("patientIds", ModuleFileProcessorUtil.defaultCohort());
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
         c.setData(data);
-        System.out.println("Completed processing Date ART started");
+        System.out.println("Completed processing pregnancy status");
         return c;
     }
 }

@@ -3,6 +3,9 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.eval
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEducationLevelDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleFileProcessorUtil;
+import org.openmrs.module.reporting.data.patient.EvaluatedPatientData;
+import org.openmrs.module.reporting.data.patient.definition.PatientDataDefinition;
+import org.openmrs.module.reporting.data.patient.evaluator.PatientDataEvaluator;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
 import org.openmrs.module.reporting.data.visit.evaluator.VisitDataEvaluator;
@@ -18,34 +21,29 @@ import java.util.Map;
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
 @Handler(supports=SpeedPhasesEducationLevelDataDefinition.class, order=50)
-public class SpeedPhasesEducationLevelDataEvaluator implements VisitDataEvaluator {
+public class SpeedPhasesEducationLevelDataEvaluator implements PatientDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
 
-    public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
-        EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
+    public EvaluatedPatientData evaluate(PatientDataDefinition definition, EvaluationContext context) throws EvaluationException {
+        EvaluatedPatientData c = new EvaluatedPatientData(definition, context);
 
-        String qry = "select v.visit_id, o.value_coded"
-                        + " from visit v "
-                        + " inner join encounter e on e.visit_id = v.visit_id "
-                        + " inner join obs o on o.encounter_id = e.encounter_id and o.voided=0 "
-                        + " where o.concept_id in(1712) ";
-                        //+ " and v.date_started > :startDate  ";
+        String qry = "select e.patient_id ,\n" +
+                "mid(max(concat(date(o.obs_datetime), cn.name)), 11) as education_level\n" +
+                "from patient p  inner join encounter e on e.patient_id = p.patient_id  \n" +
+                "inner join obs o on o.encounter_id = e.encounter_id and o.voided=0  \n" +
+                "left outer join concept_name cn on cn.concept_id=o.value_coded  and cn.concept_name_type='FULLY_SPECIFIED'\n" +
+                "    and cn.locale='en'\n" +
+                "where o.concept_id =1712 \n" +
+                "group by e.patient_id\n";
 
-        //we want to restrict visits to those for patients in question
-        qry = qry + " and v.visit_id in (";
-        qry = qry + ModuleFileProcessorUtil.getInitialCohortQuery();
-        qry = qry + ") ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
-        queryBuilder.addParameter("effectiveDate", ModuleFileProcessorUtil.getDefaultDate());
-        queryBuilder.addParameter("endDate", ModuleFileProcessorUtil.getDefaultEndDate());
-        queryBuilder.addParameter("patientIds", ModuleFileProcessorUtil.defaultCohort());
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
         c.setData(data);
-        System.out.println("Completed processing Date ART started");
+        System.out.println("Completed processing Education Level");
         return c;
     }
 }

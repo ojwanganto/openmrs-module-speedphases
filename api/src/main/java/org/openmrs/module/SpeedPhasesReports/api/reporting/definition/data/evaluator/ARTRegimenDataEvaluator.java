@@ -1,7 +1,8 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesSTIScreeningDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PWPDisclosureDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleFileProcessorUtil;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
@@ -17,8 +18,8 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=SpeedPhasesSTIScreeningDataDefinition.class, order=50)
-public class SpeedPhasesSTIScreeningDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=ARTRegimenDataDefinition.class, order=50)
+public class ARTRegimenDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
@@ -26,13 +27,11 @@ public class SpeedPhasesSTIScreeningDataEvaluator implements VisitDataEvaluator 
     public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
 
-        String qry = "select v.visit_id, cn.name "
-                        + " from visit v "
-                        + " inner join encounter e on e.visit_id = v.visit_id "
-                        + " inner join obs o on o.encounter_id = e.encounter_id and o.voided=0 "
-                        + "left outer join concept_name cn on cn.concept_id=o.value_coded  and cn.concept_name_type='FULLY_SPECIFIED'\n" +
-                             "    and cn.locale='en'\n"
-                        + " where o.concept_id = 161558 ";
+        String qry = "select v.visit_id, d.regimen_name \n" +
+                "from visit v \n" +
+                "inner join encounter e on e.visit_id = v.visit_id \n" +
+                "left outer join kenyaemr_etl.etl_drug_event d on d.patient_id=e.patient_id \n" +
+                "and v.date_started between d.date_started and d.date_discontinued";
 
         //we want to restrict visits to those for patients in question
         qry = qry + " and v.visit_id in (";
@@ -46,7 +45,7 @@ public class SpeedPhasesSTIScreeningDataEvaluator implements VisitDataEvaluator 
         queryBuilder.addParameter("patientIds", ModuleFileProcessorUtil.defaultCohort());
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
         c.setData(data);
-        System.out.println("Completed processing Date ART started");
+        System.out.println("Completed processing drugs");
         return c;
     }
 }
