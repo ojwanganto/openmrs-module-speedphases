@@ -1,8 +1,8 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitTestRequestDateDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleFileProcessorUtil;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ReasonPatientDiscontinuedDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
 import org.openmrs.module.reporting.data.visit.evaluator.VisitDataEvaluator;
@@ -17,8 +17,8 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=SpeedPhasesVisitTestRequestDateDataDefinition.class, order=50)
-public class SpeedPhasesVisitTestRequestDateDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=ReasonPatientDiscontinuedDataDefinition.class, order=50)
+public class ReasonPatientDiscontinuedDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
@@ -26,25 +26,26 @@ public class SpeedPhasesVisitTestRequestDateDataEvaluator implements VisitDataEv
     public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
 
-        String qry = "SELECT " +
-                " v.visit_id, " +
-                " e.encounter_datetime " +
-                " FROM visit v " +
-                " INNER JOIN encounter e ON e.visit_id=v.visit_id " +
-                " INNER JOIN obs o on o.encounter_id=e.encounter_id " +
-                " where o.concept_id in(5497,730,856) ";
+        String qry = "select v.visit_id, cn.name\n" +
+                "from visit v \n" +
+                "inner join encounter e on v.visit_id = e.visit_id \n" +
+                "inner join (\n" +
+                "select encounter_type_id from encounter_type where uuid=\"2bdada65-4c72-4a48-8730-859890e25cee\"\n" +
+                ") et on et.encounter_type_id = e.encounter_type \n" +
+                "left outer join obs o on o.encounter_id = e.encounter_id and o.concept_id = 161555\n" +
+                "left outer join concept_name cn on cn.concept_id=o.value_coded  and cn.concept_name_type='FULLY_SPECIFIED'\n" +
+                "and cn.locale='en' \n" +
+                " ";
 
         //we want to restrict visits to those for patients in question
         qry = qry + " and v.visit_id in (";
-        qry = qry + ModuleFileProcessorUtil.getInitialCohortQuery();
+        qry = qry + ModuleUtils.getInitialCohortQuery();
         qry = qry + ") ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
-        queryBuilder.addParameter("effectiveDate", ModuleFileProcessorUtil.getDefaultDate());
-        queryBuilder.addParameter("endDate", ModuleFileProcessorUtil.getDefaultEndDate());
-        queryBuilder.addParameter("patientIds", ModuleFileProcessorUtil.defaultCohort());
-        System.out.println("Completed processing Date Test Requested ");
+        queryBuilder.addParameter("startDate", ModuleUtils.startDate());
+        queryBuilder.addParameter("endDate", ModuleUtils.getDefaultEndDate());
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
         c.setData(data);
         return c;

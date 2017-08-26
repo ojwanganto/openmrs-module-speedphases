@@ -2,14 +2,9 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.eval
 
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.MaritalStatusDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesDateARTStartedDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleFileProcessorUtil;
 import org.openmrs.module.reporting.data.patient.EvaluatedPatientData;
 import org.openmrs.module.reporting.data.patient.definition.PatientDataDefinition;
 import org.openmrs.module.reporting.data.patient.evaluator.PatientDataEvaluator;
-import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
-import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
-import org.openmrs.module.reporting.data.visit.evaluator.VisitDataEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.querybuilder.SqlQueryBuilder;
@@ -43,7 +38,6 @@ public class SpeedPhasesMaritalStatusDataEvaluator implements PatientDataEvaluat
         queryBuilder.append(qry);
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
         c.setData(data);
-        System.out.println("Completed processing marital status");
         return c;
     }
 }

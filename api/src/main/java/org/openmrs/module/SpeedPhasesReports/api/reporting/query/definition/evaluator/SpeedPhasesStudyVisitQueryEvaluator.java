@@ -2,7 +2,7 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.eva
 
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.SpeedPhasesStudyVisitQuery;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleFileProcessorUtil;
+import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
@@ -13,7 +13,6 @@ import org.openmrs.module.reporting.query.visit.definition.VisitQuery;
 import org.openmrs.module.reporting.query.visit.evaluator.VisitQueryEvaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -29,18 +28,18 @@ public class SpeedPhasesStudyVisitQueryEvaluator implements VisitQueryEvaluator 
         context = ObjectUtil.nvl(context, new EvaluationContext());
         VisitQueryResult queryResult = new VisitQueryResult(definition, context);
 
-        String qry = ModuleFileProcessorUtil.getInitialCohortQuery();
+        String qry = "select v.visit_id \n" +
+                "from person p inner join visit v on p.person_id = v.patient_id\n" +
+                "where v.date_started between date(:startDate) and date(:endDate) \n" +
+                "and datediff(v.date_started, p.birthdate) div 365.25 between 10 and 24\n" +
+                " order by v.patient_id, v.visit_id; ";
         SqlQueryBuilder builder = new SqlQueryBuilder();
         builder.append(qry);
-        builder.addParameter("effectiveDate", ModuleFileProcessorUtil.getDefaultDate());
-        builder.addParameter("endDate", ModuleFileProcessorUtil.getDefaultEndDate());
-        builder.addParameter("patientIds", ModuleFileProcessorUtil.defaultCohort());
+        builder.addParameter("startDate", ModuleUtils.startDate());
+        builder.addParameter("endDate", ModuleUtils.getDefaultEndDate());
 
         List<Integer> results = evaluationService.evaluateToList(builder, Integer.class, context);
         queryResult.getMemberIds().addAll(results);
-        System.out.println("Effective date: ==============================" + ModuleFileProcessorUtil.getDefaultDate());
-        System.out.println("End Date: ==============================" + ModuleFileProcessorUtil.getDefaultEndDate());
-        System.out.println("Completed processing visit query: Total visits: " + results.size());
         return queryResult;
     }
 

@@ -17,6 +17,11 @@ package org.openmrs.module.SpeedPhasesReports.api.metadata;
 import org.openmrs.module.metadatadeploy.bundle.AbstractMetadataBundle;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static org.openmrs.module.metadatadeploy.bundle.CoreConstructors.globalProperty;
+
 /**
  * Metadata constants
  */
@@ -24,13 +29,18 @@ import org.springframework.stereotype.Component;
 public class ModuleReportMetadata extends AbstractMetadataBundle {
 
 	public static final String MODULE_ID = "SpeedPhasesReports";
-	public static final String DEFAULT_COHORT = MODULE_ID + ".default_cohort";
-	private String defaultConfig = "";
+	public static final String START_DATE = MODULE_ID + ".startDate";
+	public static final String END_DATE = MODULE_ID + ".endDate";
+
+	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String defaultEndDate = df.format(new Date());
+
 
 
 	@Override
 	public void install() throws Exception {
-		//install(globalProperty(DEFAULT_COHORT, "HRS Study Default Cohort. Should be a list of patient IDs else all patients qualify", defaultConfig));
+		install(globalProperty(START_DATE, "Reporting start date for Speed study report", "2015-11-01"));
+		install(globalProperty(END_DATE, "Reporting end date for Speed study report", defaultEndDate));
 
 	}
 }

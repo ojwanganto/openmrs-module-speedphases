@@ -1,7 +1,7 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenLineDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientDiscontinuedDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
@@ -17,8 +17,8 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=ARTRegimenLineDataDefinition.class, order=50)
-public class ARTRegimenLineDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=PatientDiscontinuedDataDefinition.class, order=50)
+public class PatientDiscontinuedDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
@@ -26,11 +26,16 @@ public class ARTRegimenLineDataEvaluator implements VisitDataEvaluator {
     public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
 
-        String qry = "select v.visit_id, d.regimen_line \n" +
+        String qry = "select v.visit_id, 'Yes'\n" +
                 "from visit v \n" +
-                "inner join encounter e on e.visit_id = v.visit_id \n" +
-                "left outer join kenyaemr_etl.etl_drug_event d on d.patient_id=e.patient_id \n" +
-                "and v.date_started between d.date_started and d.date_discontinued";
+                "inner join encounter e on v.visit_id = e.visit_id \n" +
+                "inner join (\n" +
+                "select encounter_type_id from encounter_type where uuid=\"2bdada65-4c72-4a48-8730-859890e25cee\"\n" +
+                ") et on et.encounter_type_id = e.encounter_type \n" +
+                "left outer join obs o on o.encounter_id = e.encounter_id and o.concept_id = 161555\n" +
+                "left outer join concept_name cn on cn.concept_id=o.value_coded  and cn.concept_name_type='FULLY_SPECIFIED'\n" +
+                "and cn.locale='en' \n" +
+                " ";
 
         //we want to restrict visits to those for patients in question
         qry = qry + " and v.visit_id in (";

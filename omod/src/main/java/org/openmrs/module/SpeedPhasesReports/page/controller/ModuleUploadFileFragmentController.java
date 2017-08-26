@@ -1,8 +1,7 @@
-package org.openmrs.module.SpeedPhasesReports.controller;
+package org.openmrs.module.SpeedPhasesReports.page.controller;
 
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.openmrs.util.OpenmrsUtil;
@@ -11,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

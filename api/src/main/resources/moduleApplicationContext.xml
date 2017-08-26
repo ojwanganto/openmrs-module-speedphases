@@ -63,8 +63,8 @@
 
 	<bean id="speedPhasesReports.app.reports" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
 		<constructor-arg value="SpeedPhasesReports.reports" />
-		<constructor-arg value="Speed and Phases studies Report Configuration" />
-		<constructor-arg value="SpeedPhasesReports/cohortImport.page" />
+		<constructor-arg value="Speed and Phases Module" />
+		<constructor-arg value="SpeedPhasesReports/speedPhasesStudyHome.page" />
 		<constructor-arg value="SpeedPhasesReports:apps/hrs_report-icon.gif" />
 		<constructor-arg value="1100000" />
 	</bean>

@@ -1,4 +1,4 @@
-package org.openmrs.module.SpeedPhasesReports.controller;
+package org.openmrs.module.SpeedPhasesReports.page.controller;
 
 /**
  * controller for cohort import fragment

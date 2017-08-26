@@ -2,7 +2,7 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.eval
 
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesDateCreatedDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleFileProcessorUtil;
+import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
 import org.openmrs.module.reporting.data.visit.evaluator.VisitDataEvaluator;
@@ -32,19 +32,17 @@ public class SpeedPhasesDateCreatedDataEvaluator implements VisitDataEvaluator {
                 " FROM visit v " +
                 " INNER JOIN encounter e ON e.visit_id=v.visit_id " +
                 " INNER JOIN obs o on o.encounter_id=e.encounter_id " +
-                " where o.concept_id in(5497,730,856) ";
+                " where o.voided ";
 
         //we want to restrict visits to those for patients in question
         qry = qry + " and v.visit_id in (";
-        qry = qry + ModuleFileProcessorUtil.getInitialCohortQuery();
+        qry = qry + ModuleUtils.getInitialCohortQuery();
         qry = qry + ") ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
-        queryBuilder.addParameter("effectiveDate", ModuleFileProcessorUtil.getDefaultDate());
-        queryBuilder.addParameter("endDate", ModuleFileProcessorUtil.getDefaultEndDate());
-        queryBuilder.addParameter("patientIds", ModuleFileProcessorUtil.defaultCohort());
-        System.out.println("Completed processing Date record created");
+        queryBuilder.addParameter("startDate", ModuleUtils.startDate());
+        queryBuilder.addParameter("endDate", ModuleUtils.getDefaultEndDate());
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
         c.setData(data);
         return c;

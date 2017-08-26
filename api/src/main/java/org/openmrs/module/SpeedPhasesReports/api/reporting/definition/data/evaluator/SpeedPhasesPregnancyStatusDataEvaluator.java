@@ -2,8 +2,7 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.eval
 
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PregnancyStatusDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesDateARTStartedDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleFileProcessorUtil;
+import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
 import org.openmrs.module.reporting.data.visit.evaluator.VisitDataEvaluator;
@@ -37,17 +36,15 @@ public class SpeedPhasesPregnancyStatusDataEvaluator implements VisitDataEvaluat
 
         //we want to restrict visits to those for patients in question
         qry = qry + " and v.visit_id in (";
-        qry = qry + ModuleFileProcessorUtil.getInitialCohortQuery();
+        qry = qry + ModuleUtils.getInitialCohortQuery();
         qry = qry + ") ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
-        queryBuilder.addParameter("effectiveDate", ModuleFileProcessorUtil.getDefaultDate());
-        queryBuilder.addParameter("endDate", ModuleFileProcessorUtil.getDefaultEndDate());
-        queryBuilder.addParameter("patientIds", ModuleFileProcessorUtil.defaultCohort());
+        queryBuilder.addParameter("startDate", ModuleUtils.startDate());
+        queryBuilder.addParameter("endDate", ModuleUtils.getDefaultEndDate());
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
         c.setData(data);
-        System.out.println("Completed processing pregnancy status");
         return c;
     }
 }
