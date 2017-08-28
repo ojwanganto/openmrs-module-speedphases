@@ -29,7 +29,7 @@ public class SpeedPhasesVisitCD4DataEvaluator implements VisitDataEvaluator {
         String qry = "select v.visit_id, o.value_numeric"
                         + " from visit v "
                         + " inner join encounter e on e.visit_id = v.visit_id "
-                        + " inner join obs o on o.encounter_id = e.encounter_id and o.voided=0 "
+                        + " left outer join obs o on o.encounter_id = e.encounter_id and o.voided=0 "
                         + " where o.concept_id in(5497, 730) ";
                         //+ " and v.date_started > :startDate ";
 

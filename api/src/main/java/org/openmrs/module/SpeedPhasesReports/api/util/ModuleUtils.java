@@ -7,7 +7,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Util class for HRSReports
@@ -44,8 +43,8 @@ public class ModuleUtils {
     public static String getInitialCohortQuery () {
 
         String qry = "select v.visit_id \n" +
-                "from person p inner join visit v on p.person_id = v.patient_id\n" +
-                "where v.date_started between date(:startDate) and date(:endDate) \n" +
+                "from patient pt inner join visit v on pt.patient_id = v.patient_id inner join person p on v.patient_id = p.person_id\n" +
+                "where v.visit_id is not null or v.visit_id != '' and date(v.date_started) between date(:startDate) and date(:endDate) \n" +
                 "and datediff(v.date_started, p.birthdate) div 365.25 between 10 and 24\n" +
                 " order by v.patient_id, v.visit_id ";
 

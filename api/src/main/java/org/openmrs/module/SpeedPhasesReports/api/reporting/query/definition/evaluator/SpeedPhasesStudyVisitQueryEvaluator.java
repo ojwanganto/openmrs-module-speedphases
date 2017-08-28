@@ -29,10 +29,13 @@ public class SpeedPhasesStudyVisitQueryEvaluator implements VisitQueryEvaluator 
         VisitQueryResult queryResult = new VisitQueryResult(definition, context);
 
         String qry = "select v.visit_id \n" +
-                "from person p inner join visit v on p.person_id = v.patient_id\n" +
-                "where v.date_started between date(:startDate) and date(:endDate) \n" +
+                "from patient pt \n" +
+                "inner join visit v on pt.patient_id = v.patient_id \n" +
+                "inner join person p on v.patient_id = p.person_id\n" +
+                "where  date(v.date_started) between date(:startDate) and date(:endDate) \n" +
                 "and datediff(v.date_started, p.birthdate) div 365.25 between 10 and 24\n" +
-                " order by v.patient_id, v.visit_id; ";
+                "group by v.visit_id \n" +
+                "having v.visit_id is not null; ";
         SqlQueryBuilder builder = new SqlQueryBuilder();
         builder.append(qry);
         builder.addParameter("startDate", ModuleUtils.startDate());

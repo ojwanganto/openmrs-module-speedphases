@@ -27,12 +27,14 @@ import org.openmrs.module.kenyaemr.calculation.library.hiv.art.InitialArtStartDa
 import org.openmrs.module.kenyaemr.metadata.HivMetadata;
 import org.openmrs.module.metadatadeploy.MetadataUtils;
 import org.openmrs.module.reporting.data.DataDefinition;
+import org.openmrs.module.reporting.data.converter.BirthdateConverter;
 import org.openmrs.module.reporting.data.converter.DataConverter;
 import org.openmrs.module.reporting.data.converter.DateConverter;
 import org.openmrs.module.reporting.data.converter.ObjectFormatter;
 import org.openmrs.module.reporting.data.patient.definition.ConvertedPatientDataDefinition;
 import org.openmrs.module.reporting.data.patient.definition.PatientIdDataDefinition;
 import org.openmrs.module.reporting.data.patient.definition.PatientIdentifierDataDefinition;
+import org.openmrs.module.reporting.data.person.definition.BirthdateDataDefinition;
 import org.openmrs.module.reporting.data.person.definition.ConvertedPersonDataDefinition;
 import org.openmrs.module.reporting.data.person.definition.GenderDataDefinition;
 import org.openmrs.module.reporting.data.person.definition.PreferredNameDataDefinition;
@@ -80,10 +82,12 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("VISIT ID", new VisitIdDataDefinition(), null);
         dsd.addColumn("id", new PatientIdDataDefinition(), "");
         dsd.addColumn("Name", nameDef, "");
+        dsd.addColumn("DOB", new BirthdateDataDefinition(), "", new BirthdateConverter("yyyy-MM-dd"));
         dsd.addColumn("Sex", new GenderDataDefinition(), "");
         dsd.addColumn("Unique Patient Number", identifierDef, null);
         dsd.addColumn("Marital Status", new MaritalStatusDataDefinition(), null);
         dsd.addColumn("Education Level", new SpeedPhasesEducationLevelDataDefinition(), null);
+        dsd.addColumn("Date Confirmed Positive", new SpeedPhasesDateConfirmedHIVPositiveDataDefinition(), "", new DateConverter("yyyy-MM-dd"));
         dsd.addColumn("Date Enrolled in Care", new CalculationDataDefinition("DOE", new SpeedPhasesEnrollmentDateCalculation()), "", new GenericDateConverter());
         dsd.addColumn("Visit Date", new SpeedPhasesVisitDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
         // new columns
