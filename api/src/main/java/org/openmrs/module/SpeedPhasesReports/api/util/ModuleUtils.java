@@ -16,7 +16,7 @@ public class ModuleUtils {
     public static Date startDate() {
         AdministrationService as = Context.getAdministrationService();
         String startDate = as.getGlobalProperty("SpeedPhasesReports.startDate");
-        DateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date sdate = (Date)formatter.parse(startDate);
             return sdate;
@@ -30,7 +30,7 @@ public class ModuleUtils {
     public static Date getDefaultEndDate() {
         AdministrationService as = Context.getAdministrationService();
         String endDate = as.getGlobalProperty("SpeedPhasesReports.endDate");
-        DateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date edate = (Date)formatter.parse(endDate);
             return edate;

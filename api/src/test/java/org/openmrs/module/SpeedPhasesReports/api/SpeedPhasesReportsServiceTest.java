@@ -26,5 +26,6 @@ public class  SpeedPhasesReportsServiceTest extends BaseModuleContextSensitiveTe
 	@Test
 	public void shouldSetupContext() {
 		assertNotNull(Context.getService(SpeedPhasesReportsService.class));
+
 	}
 }

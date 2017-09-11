@@ -56,6 +56,7 @@
 		<property name="commonReports">
 			<set>
 				<ref bean="speedPhasesReports.common.report.speedReport" />
+				<ref bean="speedPhasesReports.common.report.phaseReport" />
 			</set>
 		</property>
 	</bean>
@@ -79,6 +80,18 @@
 				<ref bean="kenyaemr.app.reports" />
 			</set></property>
 		<property name="template" value="SpeedPhasesReports:speedReportTemplate.xls" />
+		<property name="repeatingSection" value="sheet:1,row:6,dataset:VisitInformation" />
+	</bean>
+
+	<bean id="speedPhasesReports.common.report.phaseReport" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+		<property name="targetUuid" value="f853660f-08a5-4580-82b5-59b1deed2ee6" />
+		<property name="name" value="PHASE Study Report" />
+		<property name="description" value="Report for PHASE Study" />
+		<property name="apps">
+			<set>
+				<ref bean="kenyaemr.app.reports" />
+			</set></property>
+		<property name="template" value="SpeedPhasesReports:phasesReportTemplate.xls" />
 		<property name="repeatingSection" value="sheet:1,row:6,dataset:VisitInformation" />
 	</bean>
 
