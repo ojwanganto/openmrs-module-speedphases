@@ -16,35 +16,8 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.builder;
 
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.GenericDateConverter;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenLineDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.MaritalStatusDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PWPDisclosureDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientDiscontinuedDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PregnancyStatusDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ReasonPatientDiscontinuedDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesARTInterruptionReasonDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesDateConfirmedHIVPositiveDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesDeathDateDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEducationLevelDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEnrollmentDateCalculation;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesFPUsageDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesNextVisitDateDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesQueryDateCalculation;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesSTIScreeningDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesViralLoadDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitARTAdherenceDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitARTInterruptionDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCD4DataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCTXAdherenceDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCTXDispensedDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCondomUseDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitDateDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitEDDDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitPartnerHIVDisclosureDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitTBStatusDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesWHOStagingDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.*;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.PhasesStudyVisitCohortDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.SpeedPhasesStudyVisitQuery;
 import org.openmrs.module.kenyacore.report.ReportDescriptor;
 import org.openmrs.module.kenyacore.report.ReportUtils;
@@ -144,8 +117,19 @@ public class PhaseReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("ART interruption reason", new SpeedPhasesARTInterruptionReasonDataDefinition(), null);
         dsd.addColumn("Date died", new SpeedPhasesDeathDateDataDefinition(), null);
 
+        dsd.addColumn("Weight", new SpeedPhasesVisitWeightDataDefinition(), null);
+        dsd.addColumn("Height", new SpeedPhasesVisitHeightDataDefinition(), null);
+        dsd.addColumn("Treatment Supporter", new SpeedPhasesHasTreatmentSupporterDataDefinition(), null);
+        dsd.addColumn("Treatment Supporter Relationship", new SpeedPhasesTreatmentSupporterRelationshipDataDefinition(), null);
+        dsd.addColumn("Baseline VL", new SpeedPhasesBaselineVLDataDefinition(), null);
+        dsd.addColumn("Baseline WHO Stage", new SpeedPhasesWHOStagingDataDefinition(), null);
+        dsd.addColumn("Blood Pressure", new SpeedPhasesBloodPressureDataDefinition(), null);
+        dsd.addColumn("Date Transferred Out", new SpeedPhasesDateTransferredOutDataDefinition(), null);
+        dsd.addColumn("Entry Point", new SpeedPhasesEntryPointDataDefinition(), null);
+        //dsd.addColumn("Reason for Medical Switch", new SpeedPhasesReasonForMedicalSwitchDataDefinition(), null);
+
         dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new GenericDateConverter());
-        dsd.addRowFilter(new SpeedPhasesStudyVisitQuery(), "");
+        dsd.addRowFilter(new PhasesStudyVisitCohortDefinition(), "");
         return dsd;
 
     }

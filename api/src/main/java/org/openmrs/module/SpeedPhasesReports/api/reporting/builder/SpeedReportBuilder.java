@@ -105,7 +105,6 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Patient Discontinued", new PatientDiscontinuedDataDefinition(), null);
         dsd.addColumn("Discontinuation Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
         dsd.addColumn("Visit Ois", new VisitOisDataDefinition(), null);
-
         dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new GenericDateConverter());
         dsd.addRowFilter(new SpeedPhasesStudyVisitQuery(), "");
         return dsd;

@@ -5,12 +5,14 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRe
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCTXAdherenceDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
+import org.openmrs.module.reporting.data.visit.VisitDataUtil;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
 import org.openmrs.module.reporting.data.visit.evaluator.VisitDataEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.querybuilder.SqlQueryBuilder;
 import org.openmrs.module.reporting.evaluation.service.EvaluationService;
+import org.openmrs.module.reporting.query.visit.VisitIdSet;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
@@ -26,18 +28,18 @@ public class SpeedPhasesVisitCTXAdherenceDataEvaluator implements VisitDataEvalu
 
     public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
-
+        VisitIdSet visitIds = new VisitIdSet(VisitDataUtil.getVisitIdsForContext(context, false));
+        if (visitIds.getSize() == 0) {
+            return c;
+        }
         String qry = "select v.visit_id, (case fup.ctx_adherence  when 159405 then \"Good\" when 163794 then \"Inadequate\" when 159407 then \"Poor\" else \"\" end)\n" +
                 "from visit v  \n" +
                 "inner join kenyaemr_etl.etl_patient_hiv_followup fup on fup.visit_id=v.visit_id \n" +
-                "where v.voided=0 ";
+                "where v.voided=0 and v.visit_id in(:visitIds) ";
 
-        //we want to restrict visits to those for patients in question
-        qry = qry + " and v.visit_id in (";
-        qry = qry + ModuleUtils.getInitialCohortQuery();
-        qry = qry + ") ";
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
+        queryBuilder.addParameter("visitIds", visitIds);
         queryBuilder.addParameter("startDate", ModuleUtils.startDate());
         queryBuilder.addParameter("endDate", ModuleUtils.getDefaultEndDate());
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);

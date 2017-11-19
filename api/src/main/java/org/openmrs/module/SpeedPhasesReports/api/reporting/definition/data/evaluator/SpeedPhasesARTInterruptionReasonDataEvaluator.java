@@ -5,12 +5,14 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRe
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesARTInterruptionReasonDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
+import org.openmrs.module.reporting.data.visit.VisitDataUtil;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
 import org.openmrs.module.reporting.data.visit.evaluator.VisitDataEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.querybuilder.SqlQueryBuilder;
 import org.openmrs.module.reporting.evaluation.service.EvaluationService;
+import org.openmrs.module.reporting.query.visit.VisitIdSet;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
@@ -26,7 +28,10 @@ public class SpeedPhasesARTInterruptionReasonDataEvaluator implements VisitDataE
 
     public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
-
+        VisitIdSet visitIds = new VisitIdSet(VisitDataUtil.getVisitIdsForContext(context, false));
+        if (visitIds.getSize() == 0) {
+            return c;
+        }
         String qry = "select v.visit_id,\n" +
                 "COALESCE(case reason_discontinued \n" +
                 "when 102 then \"Toxicity/side effects\"\n" +
@@ -49,14 +54,11 @@ public class SpeedPhasesARTInterruptionReasonDataEvaluator implements VisitDataE
                 "end, reason_discontinued_other) reason_discontinued\n" +
                 "from visit v\n" +
                 "inner join kenyaemr_etl.etl_drug_event d on date(d.date_discontinued) = date(v.date_started) and d.patient_id=v.patient_id\n" +
-                "where discontinued is not null ";
+                "where discontinued is not null and v.visit_id in(:visitIds) ";
 
-        //we want to restrict visits to those for patients in question
-        qry = qry + " and v.visit_id in (";
-        qry = qry + ModuleUtils.getInitialCohortQuery();
-        qry = qry + ") ";
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
+        queryBuilder.addParameter("visitIds", visitIds);
         queryBuilder.addParameter("startDate", ModuleUtils.startDate());
         queryBuilder.addParameter("endDate", ModuleUtils.getDefaultEndDate());
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
