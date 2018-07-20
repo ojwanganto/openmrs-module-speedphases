@@ -1,7 +1,7 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data;
 
 import org.openmrs.module.reporting.data.BaseDataDefinition;
-import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
+import org.openmrs.module.reporting.data.patient.definition.PatientDataDefinition;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationPropertyCachingStrategy;
 import org.openmrs.module.reporting.evaluation.caching.Caching;
 
@@ -11,21 +11,21 @@ import java.util.Date;
  * Visit ID Column
  */
 @Caching(strategy=ConfigurationPropertyCachingStrategy.class)
-public class SpeedPhasesNextVisitDateDataDefinition extends BaseDataDefinition implements VisitDataDefinition {
+public class SpeedPhasesTransferInDateDataDefinition extends BaseDataDefinition implements PatientDataDefinition {
 
     public static final long serialVersionUID = 1L;
 
     /**
      * Default Constructor
      */
-    public SpeedPhasesNextVisitDateDataDefinition() {
+    public SpeedPhasesTransferInDateDataDefinition() {
         super();
     }
 
     /**
      * Constructor to populate name only
      */
-    public SpeedPhasesNextVisitDateDataDefinition(String name) {
+    public SpeedPhasesTransferInDateDataDefinition(String name) {
         super(name);
     }
 

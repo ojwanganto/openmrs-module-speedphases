@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data;
 
+import net.sf.saxon.style.DataElement;
 import org.openmrs.calculation.patient.PatientCalculationContext;
 import org.openmrs.calculation.result.CalculationResultMap;
 import org.openmrs.calculation.result.SimpleResult;
@@ -34,7 +35,7 @@ public class SpeedPhasesQueryDateCalculation extends AbstractPatientCalculation 
        	CalculationResultMap result = new CalculationResultMap();
 
         for (Integer ptId : cohort) {
-			result.put(ptId, new SimpleResult(now, this));
+			result.put(ptId, new SimpleResult(new Date(), this));
 		}
 		return  result;
 	}

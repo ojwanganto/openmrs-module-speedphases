@@ -25,6 +25,7 @@ import org.openmrs.module.kenyacore.report.builder.Builds;
 import org.openmrs.module.kenyacore.report.data.patient.definition.CalculationDataDefinition;
 import org.openmrs.module.kenyaemr.calculation.library.hiv.art.InitialArtStartDateCalculation;
 import org.openmrs.module.kenyaemr.metadata.HivMetadata;
+import org.openmrs.module.kenyaemr.reporting.data.converter.CalculationResultConverter;
 import org.openmrs.module.metadatadeploy.MetadataUtils;
 import org.openmrs.module.reporting.data.DataDefinition;
 import org.openmrs.module.reporting.data.converter.BirthdateConverter;
@@ -52,7 +53,7 @@ import java.util.List;
 @Component
 @Builds({"speedPhasesReports.common.report.speedReport"})
 public class SpeedReportBuilder extends AbstractReportBuilder {
-    public static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DATE_FORMAT = "dd/MM/yyyy";
 
     @Override
     protected List<Parameter> getParameters(ReportDescriptor descriptor) {
@@ -82,14 +83,29 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("VISIT ID", new VisitIdDataDefinition(), null);
         dsd.addColumn("id", new PatientIdDataDefinition(), "");
         dsd.addColumn("Name", nameDef, "");
-        dsd.addColumn("DOB", new BirthdateDataDefinition(), "", new BirthdateConverter("yyyy-MM-dd"));
+        dsd.addColumn("DOB", new BirthdateDataDefinition(), "", new BirthdateConverter(DATE_FORMAT));
         dsd.addColumn("Sex", new GenderDataDefinition(), "");
         dsd.addColumn("Unique Patient Number", identifierDef, null);
         dsd.addColumn("Marital Status", new MaritalStatusDataDefinition(), null);
         dsd.addColumn("Education Level", new SpeedPhasesEducationLevelDataDefinition(), null);
-        dsd.addColumn("Date Confirmed Positive", new SpeedPhasesDateConfirmedHIVPositiveDataDefinition(), "", new DateConverter("yyyy-MM-dd"));
-        dsd.addColumn("Date Enrolled in Care", new CalculationDataDefinition("DOE", new SpeedPhasesEnrollmentDateCalculation()), "", new GenericDateConverter());
+        dsd.addColumn("Date Confirmed Positive", new SpeedPhasesDateConfirmedHIVPositiveDataDefinition(), "", new DateConverter(DATE_FORMAT));
+        dsd.addColumn("Date Enrolled in Care", new CalculationDataDefinition("DOE", new SpeedPhasesEnrollmentDateCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Visit Date", new SpeedPhasesVisitDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
+
+        // wave two additional columns
+        dsd.addColumn("Baseline VL", new SpeedPhasesBaselineVLDataDefinition(), null);
+        dsd.addColumn("ART Adherence", new SpeedPhasesVisitARTAdherenceDataDefinition(), null);
+        dsd.addColumn("Entry Point", new SpeedPhasesEntryPointDataDefinition(), null);
+        dsd.addColumn("STI Screening", new SpeedPhasesSTIScreeningDataDefinition(), null);
+        dsd.addColumn("PWP Disclosure", new PWPDisclosureDataDefinition(), null);
+        dsd.addColumn("Condom Provided", new SpeedPhasesVisitCondomUseDataDefinition(), null);
+        dsd.addColumn("Visit Type", new SpeedPhasesVisitTypeDataDefinition(), null);
+        dsd.addColumn("Population Type", new SpeedPhasesPopulationTypeDataDefinition(), null);
+        dsd.addColumn("Partner Tested", new SpeedPhasesPartnerTestedDataDefinition(), null);
+        dsd.addColumn("Transfer-in Date", new SpeedPhasesTransferInDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
+        dsd.addColumn("Facility Transferred From", new SpeedPhasesFacilityTransferredFromDataDefinition(), null);
+
+        // ----------------------------
         // new columns
         dsd.addColumn("Pregnancy Status", new PregnancyStatusDataDefinition(), null);
         dsd.addColumn("FP", new SpeedPhasesFPUsageDataDefinition(), null);
@@ -99,13 +115,14 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("CD4", new SpeedPhasesVisitCD4DataDefinition(), null);
         dsd.addColumn("Viral Load", new SpeedPhasesViralLoadDataDefinition(), null);
         dsd.addColumn("Next Visit Date", new SpeedPhasesNextVisitDateDataDefinition(), "", new DateConverter(DATE_FORMAT));
-        dsd.addColumn("Art Start Date", new CalculationDataDefinition("Art Start Date", new InitialArtStartDateCalculation()), "", new GenericDateConverter());
+        dsd.addColumn("Art Start Date", new CalculationDataDefinition("Art Start Date", new InitialArtStartDateCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Regimen", new ARTRegimenDataDefinition(), null);
         dsd.addColumn("Regimen Line", new ARTRegimenLineDataDefinition(), null);
+
         dsd.addColumn("Patient Discontinued", new PatientDiscontinuedDataDefinition(), null);
         dsd.addColumn("Discontinuation Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
         dsd.addColumn("Visit Ois", new VisitOisDataDefinition(), null);
-        dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new GenericDateConverter());
+        dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new CalculationResultConverter());
         dsd.addRowFilter(new SpeedPhasesStudyVisitQuery(), "");
         return dsd;
 
