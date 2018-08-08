@@ -37,6 +37,7 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.Speed
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesNextVisitDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesQueryDateCalculation;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesSTIScreeningDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesTransferInDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesTreatmentSupporterRelationshipDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesViralLoadDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitARTAdherenceDataDefinition;
@@ -50,6 +51,7 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.Speed
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitHeightDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitPartnerHIVDisclosureDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitTBStatusDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitTypeDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitWeightDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesWHOStagingDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDataDefinition;
@@ -126,6 +128,7 @@ public class SpeedTenToTwentyFourReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Education Level", new SpeedPhasesEducationLevelDataDefinition(), null);
         dsd.addColumn("Date Confirmed Positive", new SpeedPhasesDateConfirmedHIVPositiveDataDefinition(), "", new DateConverter("yyyy-MM-dd"));
         dsd.addColumn("Date Enrolled in Care", new CalculationDataDefinition("DOE", new SpeedPhasesEnrollmentDateCalculation()), "", new GenericDateConverter());
+        dsd.addColumn("Transfer-in Date", new SpeedPhasesTransferInDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
         dsd.addColumn("Visit Date", new SpeedPhasesVisitDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
         // new columns
         dsd.addColumn("Pregnancy Status", new PregnancyStatusDataDefinition(), null);
@@ -146,6 +149,7 @@ public class SpeedTenToTwentyFourReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Partner HIV Disclosure", new SpeedPhasesVisitPartnerHIVDisclosureDataDefinition(), null);
         dsd.addColumn("EDD", new SpeedPhasesVisitEDDDataDefinition(), null);
         dsd.addColumn("Condom provided", new SpeedPhasesVisitCondomUseDataDefinition(), null);
+        dsd.addColumn("Visit Type", new SpeedPhasesVisitTypeDataDefinition(), null);
         dsd.addColumn("CTX adherence", new SpeedPhasesVisitCTXAdherenceDataDefinition(), null);
         dsd.addColumn("CTX dispensed", new SpeedPhasesVisitCTXDispensedDataDefinition(), null);
         dsd.addColumn("ART adherence", new SpeedPhasesVisitARTAdherenceDataDefinition(), null);

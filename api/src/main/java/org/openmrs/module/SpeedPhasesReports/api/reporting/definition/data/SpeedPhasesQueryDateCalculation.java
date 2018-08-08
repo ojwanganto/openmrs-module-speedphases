@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data;
 
-import net.sf.saxon.style.DataElement;
 import org.openmrs.calculation.patient.PatientCalculationContext;
 import org.openmrs.calculation.result.CalculationResultMap;
 import org.openmrs.calculation.result.SimpleResult;
