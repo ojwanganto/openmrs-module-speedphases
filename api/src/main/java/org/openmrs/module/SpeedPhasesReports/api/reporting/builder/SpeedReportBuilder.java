@@ -112,17 +112,27 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("WHO Stage", new SpeedPhasesWHOStagingDataDefinition(), null);
         dsd.addColumn("STI Screening", new SpeedPhasesSTIScreeningDataDefinition(), null);
         dsd.addColumn("PWP Disclosure", new PWPDisclosureDataDefinition(), null);
-        dsd.addColumn("CD4", new SpeedPhasesVisitCD4DataDefinition(), null);
-        dsd.addColumn("Viral Load", new SpeedPhasesViralLoadDataDefinition(), null);
+        dsd.addColumn("CD4 Result", new SpeedPhasesVisitCD4DataDefinition(), null);
+        dsd.addColumn("CD4 Date", new SpeedPhasesVisitCD4DateDataDefinition(), null);
+        dsd.addColumn("VL Result", new SpeedPhasesViralLoadDataDefinition(), null);
+        dsd.addColumn("VL date", new SpeedPhasesViralLoadDateDataDefinition(), null);
         dsd.addColumn("Next Visit Date", new SpeedPhasesNextVisitDateDataDefinition(), "", new DateConverter(DATE_FORMAT));
         dsd.addColumn("Art Start Date", new CalculationDataDefinition("Art Start Date", new InitialArtStartDateCalculation()), "", new CalculationResultConverter());
-        dsd.addColumn("Regimen", new ARTRegimenDataDefinition(), null);
-        dsd.addColumn("Regimen Line", new ARTRegimenLineDataDefinition(), null);
+        dsd.addColumn("Last ART Regimen", new ARTRegimenDataDefinition(), null);
+        dsd.addColumn("Last ART Regimen Line", new ARTRegimenLineDataDefinition(), null);
 
         dsd.addColumn("Patient Discontinued", new PatientDiscontinuedDataDefinition(), null);
         dsd.addColumn("Discontinuation Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
         dsd.addColumn("Visit Ois", new VisitOisDataDefinition(), null);
+        dsd.addColumn("Visit Ois Date", new VisitOisDateDataDefinition(), null);
+
+        dsd.addColumn("Exit date", new PatientDiscontinuedDataDefinition(), null);
+        dsd.addColumn("Exit Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
+
+
         dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new CalculationResultConverter());
+
+
         dsd.addRowFilter(new SpeedPhasesStudyVisitQuery(), "");
         return dsd;
 

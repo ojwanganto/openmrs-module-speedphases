@@ -2,6 +2,7 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.eval
 
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
@@ -19,7 +20,7 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=VisitOisDataDefinition.class, order=50)
+@Handler(supports=VisitOisDateDataDefinition.class, order=50)
 public class VisitOisDataEvaluator implements VisitDataEvaluator {
 
     @Autowired

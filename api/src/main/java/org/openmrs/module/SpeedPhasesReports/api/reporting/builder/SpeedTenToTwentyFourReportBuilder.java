@@ -55,7 +55,6 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.Speed
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitWeightDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesWHOStagingDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.PhasesStudyVisitCohortDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.SpeedTenToTwentyFourStudyVisitCohortDefinition;
 import org.openmrs.module.kenyacore.report.ReportDescriptor;
 import org.openmrs.module.kenyacore.report.ReportUtils;

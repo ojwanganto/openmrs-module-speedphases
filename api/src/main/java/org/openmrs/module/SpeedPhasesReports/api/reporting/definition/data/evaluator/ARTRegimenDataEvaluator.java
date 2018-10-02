@@ -32,11 +32,10 @@ public class ARTRegimenDataEvaluator implements VisitDataEvaluator {
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, d.regimen_name \n" +
-                "from visit v \n" +
-                "inner join encounter e on e.visit_id = v.visit_id \n" +
-                "left outer join kenyaemr_etl.etl_drug_event d on d.patient_id=e.patient_id \n" +
-                "and v.date_started between d.date_started and d.date_discontinued and v.visit_id in (:visitIds)";
+        String qry = "select v.visit_id, max(v.date_started) as lastRegimenDate\n" +
+                " from visit v \n" +
+                " left join kenyaemr_etl.etl_drug_event d on d.patient_id = v.patient_id and d.date_started <= v.date_started\n" +
+                " group by v.visit_id and v.visit_id in(:visitIds)";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);

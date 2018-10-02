@@ -1,7 +1,7 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenLineDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
@@ -19,8 +19,8 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=ARTRegimenLineDataDefinition.class, order=50)
-public class ARTRegimenLineDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=ARTRegimenDataDefinition.class, order=50)
+public class ARTRegimenVisitDateDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
@@ -32,7 +32,7 @@ public class ARTRegimenLineDataEvaluator implements VisitDataEvaluator {
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, mid(max(concat(v.date_started, d.regimen_line)), 20) as regimenLine\n" +
+        String qry = "select v.visit_id, mid(max(concat(v.date_started, d.regimen_name)), 20) as regimenName\n" +
                 " from visit v \n" +
                 " left join kenyaemr_etl.etl_drug_event d on d.patient_id = v.patient_id and d.date_started <= v.date_started\n" +
                 " group by v.visit_id and v.visit_id in(:visitIds)";

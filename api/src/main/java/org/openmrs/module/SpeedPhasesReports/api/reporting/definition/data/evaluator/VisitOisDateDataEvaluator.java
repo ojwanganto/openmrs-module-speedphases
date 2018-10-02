@@ -1,7 +1,7 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenLineDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
@@ -19,23 +19,28 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=ARTRegimenLineDataDefinition.class, order=50)
-public class ARTRegimenLineDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=VisitOisDataDefinition.class, order=50)
+public class VisitOisDateDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
 
     public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
-
         VisitIdSet visitIds = new VisitIdSet(VisitDataUtil.getVisitIdsForContext(context, false));
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, mid(max(concat(v.date_started, d.regimen_line)), 20) as regimenLine\n" +
-                " from visit v \n" +
-                " left join kenyaemr_etl.etl_drug_event d on d.patient_id = v.patient_id and d.date_started <= v.date_started\n" +
-                " group by v.visit_id and v.visit_id in(:visitIds)";
+        String qry = "select v.visit_id, if(o.value_coded != 1107,date(o.obs_datetime), '') as visitOIsDate\n" +
+                "from visit v \n" +
+                "inner join encounter e on v.visit_id = e.visit_id \n" +
+                "inner join (\n" +
+                "select encounter_type_id from encounter_type where uuid='a0034eee-1940-4e35-847f-97537a35d05e'\n" +
+                ") et on et.encounter_type_id = e.encounter_type \n" +
+                "inner join obs o on o.encounter_id = e.encounter_id and o.concept_id = 6042\n" +
+                "left outer join concept_name cn on cn.concept_id=o.value_coded  and cn.concept_name_type='FULLY_SPECIFIED'\n" +
+                "and cn.locale='en' and v.visit_id in(:visitIds) group by v.visit_id ";
+
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
