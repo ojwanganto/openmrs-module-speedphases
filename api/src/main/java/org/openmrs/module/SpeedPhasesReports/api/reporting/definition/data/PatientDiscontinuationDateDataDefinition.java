@@ -11,21 +11,21 @@ import java.util.Date;
  * Visit ID Column
  */
 @Caching(strategy=ConfigurationPropertyCachingStrategy.class)
-public class SpeedPhasesViralLoadDateDataDefinition extends BaseDataDefinition implements VisitDataDefinition {
+public class PatientDiscontinuationDateDataDefinition extends BaseDataDefinition implements VisitDataDefinition {
 
     public static final long serialVersionUID = 1L;
 
     /**
      * Default Constructor
      */
-    public SpeedPhasesViralLoadDateDataDefinition() {
+    public PatientDiscontinuationDateDataDefinition() {
         super();
     }
 
     /**
      * Constructor to populate name only
      */
-    public SpeedPhasesViralLoadDateDataDefinition(String name) {
+    public PatientDiscontinuationDateDataDefinition(String name) {
         super(name);
     }
 

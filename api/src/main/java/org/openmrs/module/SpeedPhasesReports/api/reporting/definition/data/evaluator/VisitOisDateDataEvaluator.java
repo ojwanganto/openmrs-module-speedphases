@@ -31,7 +31,7 @@ public class VisitOisDateDataEvaluator implements VisitDataEvaluator {
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, if(o.value_coded != 1107,date(o.obs_datetime), '') as visitOIsDate\n" +
+        String qry = "select v.visit_id, if(o.value_coded != 1107,DATE_FORMAT(o.obs_datetime, '%d/%m/%Y'), '') as visitOIsDate\n" +
                 "from visit v \n" +
                 "inner join encounter e on v.visit_id = e.visit_id \n" +
                 "inner join (\n" +

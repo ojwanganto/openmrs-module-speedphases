@@ -32,7 +32,7 @@ public class SpeedPhasesViralLoadDateDataEvaluator implements VisitDataEvaluator
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, date(v.date_started) "
+        String qry = "select v.visit_id, DATE_FORMAT(v.date_started, '%d/%m/%Y') "
                         + " from visit v "
                         + " inner join encounter e on e.visit_id = v.visit_id "
                         + " left outer join obs o on o.encounter_id = e.encounter_id and o.voided=0 "

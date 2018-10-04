@@ -35,7 +35,8 @@ public class ARTRegimenLineDataEvaluator implements VisitDataEvaluator {
         String qry = "select v.visit_id, mid(max(concat(v.date_started, d.regimen_line)), 20) as regimenLine\n" +
                 " from visit v \n" +
                 " left join kenyaemr_etl.etl_drug_event d on d.patient_id = v.patient_id and d.date_started <= v.date_started\n" +
-                " group by v.visit_id and v.visit_id in(:visitIds)";
+                " where v.visit_id in(:visitIds) " +
+                " group by v.visit_id ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);

@@ -5,27 +5,25 @@ import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationPropertyCachingStrategy;
 import org.openmrs.module.reporting.evaluation.caching.Caching;
 
-import java.util.Date;
-
 /**
  * Visit ID Column
  */
 @Caching(strategy=ConfigurationPropertyCachingStrategy.class)
-public class SpeedPhasesViralLoadDateDataDefinition extends BaseDataDefinition implements VisitDataDefinition {
+public class ARTRegimenVisitDateDataDefinition extends BaseDataDefinition implements VisitDataDefinition {
 
     public static final long serialVersionUID = 1L;
 
     /**
      * Default Constructor
      */
-    public SpeedPhasesViralLoadDateDataDefinition() {
+    public ARTRegimenVisitDateDataDefinition() {
         super();
     }
 
     /**
      * Constructor to populate name only
      */
-    public SpeedPhasesViralLoadDateDataDefinition(String name) {
+    public ARTRegimenVisitDateDataDefinition(String name) {
         super(name);
     }
 
@@ -35,6 +33,6 @@ public class SpeedPhasesViralLoadDateDataDefinition extends BaseDataDefinition i
      * @see org.openmrs.module.reporting.data.DataDefinition#getDataType()
      */
     public Class<?> getDataType() {
-        return String.class;
+        return Double.class;
     }
 }

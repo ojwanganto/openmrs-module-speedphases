@@ -1,8 +1,8 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCD4DataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCD4DateDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientDiscontinuationDateDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientDiscontinuedDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
@@ -20,23 +20,29 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=SpeedPhasesVisitCD4DateDataDefinition.class, order=50)
-public class SpeedPhasesVisitCD4DateDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=PatientDiscontinuationDateDataDefinition.class, order=50)
+public class PatientDiscontinuationDateDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
 
     public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
+
         VisitIdSet visitIds = new VisitIdSet(VisitDataUtil.getVisitIdsForContext(context, false));
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, DATE_FORMAT(o.obs_datetime, '%d/%m/%Y')"
-                        + " from visit v "
-                        + " inner join encounter e on e.visit_id = v.visit_id "
-                        + " left outer join obs o on o.encounter_id = e.encounter_id and o.voided=0 "
-                        + " where o.concept_id in(5497, 730) and v.visit_id in(:visitIds) ";
+        String qry = "select v.visit_id, DATE_FORMAT(v.date_started, '%d/%m/%Y')\n" +
+                "from visit v \n" +
+                "inner join encounter e on v.visit_id = e.visit_id \n" +
+                "inner join (\n" +
+                "select encounter_type_id from encounter_type where uuid=\"2bdada65-4c72-4a48-8730-859890e25cee\"\n" +
+                ") et on et.encounter_type_id = e.encounter_type \n" +
+                "left outer join obs o on o.encounter_id = e.encounter_id and o.concept_id = 161555\n" +
+                "left outer join concept_name cn on cn.concept_id=o.value_coded  and cn.concept_name_type='FULLY_SPECIFIED'\n" +
+                "and cn.locale='en' \n" +
+                " and v.visit_id in (:visitIds) ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);

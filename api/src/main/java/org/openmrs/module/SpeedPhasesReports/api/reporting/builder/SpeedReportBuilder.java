@@ -90,6 +90,9 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Education Level", new SpeedPhasesEducationLevelDataDefinition(), null);
         dsd.addColumn("Date Confirmed Positive", new SpeedPhasesDateConfirmedHIVPositiveDataDefinition(), "", new DateConverter(DATE_FORMAT));
         dsd.addColumn("Date Enrolled in Care", new CalculationDataDefinition("DOE", new SpeedPhasesEnrollmentDateCalculation()), "", new CalculationResultConverter());
+        dsd.addColumn("Age at Enrollment", new CalculationDataDefinition("AgeatEnrollment", new SpeedPhasesAgeAtProgramEnrollmentCalculation()), "", new CalculationResultConverter());
+        //dsd.addColumn("Age at Enrollment", new SpeedPhasesAgeAtEnrollmentDataDefinition(), null);
+        //dsd.addColumn("Age at ART Start", new SpeedPhasesAgeAtARTStartDataDefinition(), null);
         dsd.addColumn("Visit Date", new SpeedPhasesVisitDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
 
         // wave two additional columns
@@ -113,11 +116,12 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("STI Screening", new SpeedPhasesSTIScreeningDataDefinition(), null);
         dsd.addColumn("PWP Disclosure", new PWPDisclosureDataDefinition(), null);
         dsd.addColumn("CD4 Result", new SpeedPhasesVisitCD4DataDefinition(), null);
-        dsd.addColumn("CD4 Date", new SpeedPhasesVisitCD4DateDataDefinition(), null);
+        dsd.addColumn("CD4 Date", new SpeedPhasesVisitCD4DateDataDefinition(), "");
         dsd.addColumn("VL Result", new SpeedPhasesViralLoadDataDefinition(), null);
-        dsd.addColumn("VL date", new SpeedPhasesViralLoadDateDataDefinition(), null);
+        dsd.addColumn("VL Date", new SpeedPhasesViralLoadDateDataDefinition(), "");
         dsd.addColumn("Next Visit Date", new SpeedPhasesNextVisitDateDataDefinition(), "", new DateConverter(DATE_FORMAT));
         dsd.addColumn("Art Start Date", new CalculationDataDefinition("Art Start Date", new InitialArtStartDateCalculation()), "", new CalculationResultConverter());
+        dsd.addColumn("Age at ART Start", new CalculationDataDefinition("Age at Art Start", new SpeedPhasesAgeAtARTStartCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Last ART Regimen", new ARTRegimenDataDefinition(), null);
         dsd.addColumn("Last ART Regimen Line", new ARTRegimenLineDataDefinition(), null);
 
@@ -126,7 +130,7 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Visit Ois", new VisitOisDataDefinition(), null);
         dsd.addColumn("Visit Ois Date", new VisitOisDateDataDefinition(), null);
 
-        dsd.addColumn("Exit date", new PatientDiscontinuedDataDefinition(), null);
+        dsd.addColumn("Exit date", new PatientDiscontinuationDateDataDefinition(), "");
         dsd.addColumn("Exit Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
 
 
