@@ -108,5 +108,17 @@
 		<property name="repeatingSection" value="sheet:1,row:6,dataset:VisitInformation" />
 	</bean>
 
+	<bean id="speedPhasesReports.common.report.speedZeroToFourty" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+		<property name="targetUuid" value="e45104a8-3980-11e9-b210-d663bd873d93" />
+		<property name="name" value="SPEED 0-40 Report" />
+		<property name="description" value="SPEED 0-40 Report (with PHASE variables)" />
+		<property name="apps">
+			<set>
+				<ref bean="kenyaemr.app.reports" />
+			</set></property>
+		<property name="template" value="SpeedPhasesReports:speed10to24ReportTemplate.xls" />
+		<property name="repeatingSection" value="sheet:1,row:6,dataset:VisitInformation" />
+	</bean>
+
 	
 </beans>
