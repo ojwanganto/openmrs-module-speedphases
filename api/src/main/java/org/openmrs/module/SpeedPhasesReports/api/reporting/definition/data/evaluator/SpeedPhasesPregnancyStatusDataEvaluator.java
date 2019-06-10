@@ -41,8 +41,8 @@ public class SpeedPhasesPregnancyStatusDataEvaluator implements VisitDataEvaluat
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
         queryBuilder.addParameter("visitIds", visitIds);
-        queryBuilder.addParameter("startDate", ModuleUtils.startDate());
-        queryBuilder.addParameter("endDate", ModuleUtils.getDefaultEndDate());
+        /*queryBuilder.addParameter("startDate", ModuleUtils.startDate());
+        queryBuilder.addParameter("endDate", ModuleUtils.getDefaultEndDate());*/
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
         c.setData(data);
         return c;

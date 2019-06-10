@@ -1,8 +1,7 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTOriginalRegimenLineDataDefinition;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
@@ -19,8 +18,8 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=ARTRegimenDataDefinition.class, order=50)
-public class ARTRegimenDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=ARTOriginalRegimenLineDataDefinition.class, order=50)
+public class ARTOriginalRegimenLineDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
@@ -32,7 +31,7 @@ public class ARTRegimenDataEvaluator implements VisitDataEvaluator {
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, mid(max(concat(v.date_started, d.regimen_name)), 20) as regimenName\n" +
+        String qry = "select v.visit_id, mid(min(concat(v.date_started, d.regimen_line)), 20) as regimenLine\n" +
                 " from visit v \n" +
                 " left join kenyaemr_etl.etl_drug_event d on d.patient_id = v.patient_id and d.date_started <= v.date_started\n" +
                 " where v.visit_id in(:visitIds) " +
@@ -41,7 +40,7 @@ public class ARTRegimenDataEvaluator implements VisitDataEvaluator {
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
         queryBuilder.addParameter("visitIds", visitIds);
-       /* queryBuilder.addParameter("startDate", ModuleUtils.startDate());
+        /*queryBuilder.addParameter("startDate", ModuleUtils.startDate());
         queryBuilder.addParameter("endDate", ModuleUtils.getDefaultEndDate());*/
         Map<Integer, Object> data = evaluationService.evaluateToMap(queryBuilder, Integer.class, Object.class, context);
         c.setData(data);
