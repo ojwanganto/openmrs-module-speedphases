@@ -170,10 +170,10 @@ public class DiscReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Art Start Date", new CalculationDataDefinition("Art Start Date", new InitialArtStartDateCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Age at ART Start", new CalculationDataDefinition("Age at Art Start", new SpeedPhasesAgeAtARTStartCalculation()), "", new CalculationResultConverter());
 
-        dsd.addColumn("StartRegimen", new ARTOriginalRegimenDataDefinition(), null, new DiscRegimenConverter());
+        dsd.addColumn("StartRegimen", new ARTOriginalRegimenDataDefinition(), null);
         dsd.addColumn("StartRegimen Line", new ARTOriginalRegimenLineDataDefinition(), null);
 
-        dsd.addColumn("Last ART Regimen", new ARTRegimenDataDefinition(), null, new DiscRegimenConverter());
+        dsd.addColumn("Last ART Regimen", new ARTRegimenDataDefinition(), null);
         dsd.addColumn("Last ART Regimen Line", new ARTRegimenLineDataDefinition(), null);
         dsd.addColumn("Last ART Date", new DiscLastArtDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
         dsd.addColumn("Duration", new DiscLastArtDurationDataDefinition(), null);

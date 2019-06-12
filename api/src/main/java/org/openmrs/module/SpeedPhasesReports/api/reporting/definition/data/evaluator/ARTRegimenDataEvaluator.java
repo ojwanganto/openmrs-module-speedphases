@@ -32,7 +32,7 @@ public class ARTRegimenDataEvaluator implements VisitDataEvaluator {
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, mid(max(concat(v.date_started, d.regimen_name)), 20) as regimenName\n" +
+        String qry = "select v.visit_id, mid(max(concat(v.date_started, d.regimen)), 20) as regimenName\n" +
                 " from visit v \n" +
                 " left join kenyaemr_etl.etl_drug_event d on d.patient_id = v.patient_id and d.date_started <= v.date_started\n" +
                 " where v.visit_id in(:visitIds) " +

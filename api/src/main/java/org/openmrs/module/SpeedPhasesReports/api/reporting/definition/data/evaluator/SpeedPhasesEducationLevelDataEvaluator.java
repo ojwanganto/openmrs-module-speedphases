@@ -25,12 +25,10 @@ public class SpeedPhasesEducationLevelDataEvaluator implements PatientDataEvalua
     public EvaluatedPatientData evaluate(PatientDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedPatientData c = new EvaluatedPatientData(definition, context);
 
-        String qry = "select p.patient_id ,\n" +
-                " mid(max(concat(date(o.obs_datetime), cn.name)), 11) as education_level\n" +
-                " from patient p inner join  obs o on o.person_id = p.patient_id and o.voided=0  and o.concept_id =1712\n" +
-                " left outer join concept_name cn on cn.concept_id=o.value_coded  and cn.concept_name_type='FULLY_SPECIFIED'\n" +
-                "     and cn.locale='en'\n" +
-                " group by p.patient_id";
+        String qry = " select\n " +
+                " d.patient_id, d.education_level " +
+                " from kenyaemr_etl.etl_patient_demographics d \n" +
+                " group by d.patient_id\n";
 
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();

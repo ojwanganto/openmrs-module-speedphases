@@ -3,6 +3,8 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.eval
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DiscLastArtDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesPartnerTestedDataDefinition;
+import org.openmrs.module.reporting.data.patient.EvaluatedPatientData;
+import org.openmrs.module.reporting.data.patient.definition.PatientDataDefinition;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
@@ -34,6 +36,7 @@ public class DiscLastArtDateDataEvaluator implements VisitDataEvaluator {
         String qry = "select v.visit_id, fup.visit_date \n" +
                 "from visit v  \n" +
                 "inner join kenyaemr_etl.etl_patient_hiv_followup fup on fup.visit_id=v.visit_id \n" +
+                "inner join kenyaemr_etl.etl_drug_event e on e.patient_id=fup.patient_id \n" +
                 "where v.voided=0 and v.visit_id in(:visitIds) ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();

@@ -33,6 +33,6 @@ public class DiscLastArtDurationDataDefinition extends BaseDataDefinition implem
      * @see org.openmrs.module.reporting.data.DataDefinition#getDataType()
      */
     public Class<?> getDataType() {
-        return Double.class;
+        return String.class;
     }
 }

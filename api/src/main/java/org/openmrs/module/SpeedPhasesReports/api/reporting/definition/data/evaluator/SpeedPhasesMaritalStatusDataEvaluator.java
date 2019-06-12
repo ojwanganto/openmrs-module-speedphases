@@ -25,14 +25,10 @@ public class SpeedPhasesMaritalStatusDataEvaluator implements PatientDataEvaluat
     public EvaluatedPatientData evaluate(PatientDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedPatientData c = new EvaluatedPatientData(definition, context);
 
-        String qry = "select e.patient_id ,\n" +
-                "mid(max(concat(date(o.obs_datetime), cn.name)), 11) as marital_status\n" +
-                "from patient p  inner join encounter e on e.patient_id = p.patient_id  \n" +
-                "inner join obs o on o.encounter_id = e.encounter_id and o.voided=0  \n" +
-                "left outer join concept_name cn on cn.concept_id=o.value_coded  and cn.concept_name_type='FULLY_SPECIFIED'\n" +
-                "    and cn.locale='en'\n" +
-                "where o.concept_id =1054 \n" +
-                "group by e.patient_id\n";
+        String qry = "select\n" +
+                " patient_id, marital_status \n" +
+                " from kenyaemr_etl.etl_patient_demographics \n" +
+                " group by patient_id; ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
