@@ -5,7 +5,7 @@ import org.openmrs.module.reporting.data.converter.DataConverter;
 /**
  * Converts date element to custom regimen format
  */
-public class DiscMaritalStatusConverter implements DataConverter {
+public class DCOMConverter implements DataConverter {
 
     @Override
     public Object convert(Object original) {
@@ -29,17 +29,17 @@ public class DiscMaritalStatusConverter implements DataConverter {
     }
 
     private String formatRegimen(String r) {
-        if (r.equals("Separated")) {
-            return "Divorced";
-        } else if (r.equals("Polygamous")) {
-            return "Married polygamous";
-        } else if (r.equals("Never married")) {
-            return "Single";
-        } else if (r.equals("Married")) {
-            return "Married monogamous";
-        } else if (r.equals("Living with partner")) {
-            return "Cohabiting";
+        if (r.equals(164942)) {
+            return "Standard Care";
+        } else if (r.equals(164943)) {
+            return "Fast Track";
+        } else if (r.equals(164944)) {
+            return "Community ART Distribution - HCW Led";
+        } else if (r.equals(164945)) {
+            return "Community ART Distribution - Peer Led";
+        } else if (r.equals(164946)) {
+            return "Facility ART Distribution Group";
         }
-        return r;
+        return "";
     }
 }
