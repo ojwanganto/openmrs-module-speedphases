@@ -15,12 +15,15 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.builder;
 
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.DCOMConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.GenericDateConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenLineDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DCOMDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.MaritalStatusDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PWPDisclosureDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientDiscontinuedDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientStabilityDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PregnancyStatusDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ReasonPatientDiscontinuedDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesARTInterruptionReasonDataDefinition;
@@ -166,6 +169,8 @@ public class SpeedTenToTwentyFourReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Date Transferred Out", new SpeedPhasesDateTransferredOutDataDefinition(), null);
         dsd.addColumn("Entry Point", new SpeedPhasesEntryPointDataDefinition(), null);
         //dsd.addColumn("Reason for Medical Switch", new SpeedPhasesReasonForMedicalSwitchDataDefinition(), null);
+        dsd.addColumn("Stable/Unstable", new PatientStabilityDataDefinition(), null);
+        dsd.addColumn("CurrentCareModel", new DCOMDataDefinition(), null,new DCOMConverter());
 
         dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new GenericDateConverter());
         dsd.addRowFilter(new SpeedTenToTwentyFourStudyVisitCohortDefinition(), "");

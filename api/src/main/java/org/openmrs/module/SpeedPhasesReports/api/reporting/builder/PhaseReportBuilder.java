@@ -126,6 +126,7 @@ public class PhaseReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Blood Pressure", new SpeedPhasesBloodPressureDataDefinition(), null);
         dsd.addColumn("Date Transferred Out", new SpeedPhasesDateTransferredOutDataDefinition(), null);
         dsd.addColumn("Entry Point", new SpeedPhasesEntryPointDataDefinition(), null);
+
         //dsd.addColumn("Reason for Medical Switch", new SpeedPhasesReasonForMedicalSwitchDataDefinition(), null);
 
         dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new GenericDateConverter());

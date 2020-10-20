@@ -15,6 +15,7 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.builder;
 
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.DCOMConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.GenericDateConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.*;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.SpeedPhasesStudyVisitQuery;
@@ -129,6 +130,9 @@ public class SpeedReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Discontinuation Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
         dsd.addColumn("Visit Ois", new VisitOisDataDefinition(), null);
         dsd.addColumn("Visit Ois Date", new VisitOisDateDataDefinition(), null);
+
+        dsd.addColumn("Stable/Unstable", new PatientStabilityDataDefinition(), null);
+        dsd.addColumn("CurrentCareModel", new DCOMDataDefinition(), null,new DCOMConverter());
 
         dsd.addColumn("Exit date", new PatientDiscontinuationDateDataDefinition(), "");
         dsd.addColumn("Exit Reason", new ReasonPatientDiscontinuedDataDefinition(), null);

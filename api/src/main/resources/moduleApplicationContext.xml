@@ -55,11 +55,14 @@
 	<bean id="speedPhasesReports.config.report" class="org.openmrs.module.kenyacore.report.ReportConfiguration">
 		<property name="commonReports">
 			<set>
-			<!--	<ref bean="speedPhasesReports.common.report.speedReport" />
+				<ref bean="speedPhasesReports.common.report.speedReport" />
+<!--
 				<ref bean="speedPhasesReports.common.report.phaseReport" />
+-->
 				<ref bean="speedPhasesReports.common.report.speedTenToTwentyFour" />
-				<ref bean="speedPhasesReports.common.report.speedZeroToFourty" />-->
+				<ref bean="speedPhasesReports.common.report.speedZeroToFourty" />
 				<ref bean="speedPhasesReports.common.report.discReport" />
+				<ref bean="speedPhasesReports.common.report.dartReport"/>
 			</set>
 		</property>
 	</bean>
@@ -134,5 +137,16 @@
 		<property name="repeatingSection" value="sheet:1,row:6,dataset:VisitInformation" />
 	</bean>
 
+	<bean id="speedPhasesReports.common.report.dartReport" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+		<property name="targetUuid" value="ca569f57-b474-40af-9496-74c007debbc0" />
+		<property name="name" value="DART Study Report" />
+		<property name="description" value="DART Study Report" />
+		<property name="apps">
+			<set>
+				<ref bean="kenyaemr.app.reports" />
+			</set></property>
+		<property name="template" value="SpeedPhasesReports:dartReportTemplate.xls" />
+		<property name="repeatingSection" value="sheet:1,row:6,dataset:VisitInformation" />
+	</bean>
 	
 </beans>

@@ -10,17 +10,17 @@ public class DCOMConverter implements DataConverter {
     @Override
     public Object convert(Object original) {
 
-        String d = (String) original;
+        Integer d = (Integer) original;
 
         if (d == null)
             return " ";
 
-        return formatRegimen(d);
+        return formatCareModel(d);
     }
 
     @Override
     public Class<?> getInputDataType() {
-        return String.class;
+        return Integer.class;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class DCOMConverter implements DataConverter {
         return String.class;
     }
 
-    private String formatRegimen(String r) {
+    private String formatCareModel(Integer r) {
         if (r.equals(164942)) {
             return "Standard Care";
         } else if (r.equals(164943)) {

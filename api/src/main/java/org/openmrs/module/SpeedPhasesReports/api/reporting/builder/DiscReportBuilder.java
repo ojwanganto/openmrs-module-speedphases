@@ -15,18 +15,21 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.builder;
 
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.DCOMConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.DiscMaritalStatusConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.DiscRegimenConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTOriginalRegimenDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTOriginalRegimenLineDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRegimenLineDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DCOMDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DiscLastArtDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DiscLastArtDurationDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.MaritalStatusDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PWPDisclosureDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientDiscontinuationDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientDiscontinuedDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientStabilityDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PregnancyStatusDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ReasonPatientDiscontinuedDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesAgeAtARTStartCalculation;
@@ -182,6 +185,9 @@ public class DiscReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Discontinuation Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
         dsd.addColumn("Visit Ois", new VisitOisDataDefinition(), null);
         dsd.addColumn("Visit Ois Date", new VisitOisDateDataDefinition(), null);
+
+        dsd.addColumn("Stable/Unstable", new PatientStabilityDataDefinition(), null);
+        dsd.addColumn("CurrentCareModel", new DCOMDataDefinition(), null,new DCOMConverter());
 
         dsd.addColumn("Exit date", new PatientDiscontinuationDateDataDefinition(), "");
         dsd.addColumn("Exit Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
