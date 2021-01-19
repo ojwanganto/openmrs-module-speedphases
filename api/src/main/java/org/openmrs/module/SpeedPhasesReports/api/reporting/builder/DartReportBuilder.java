@@ -34,6 +34,7 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.Reaso
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesAgeAtARTStartCalculation;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesAgeAtProgramEnrollmentCalculation;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesBaselineVLDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesBloodPressureDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesDateConfirmedHIVPositiveDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEducationLevelDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEnrollmentDateCalculation;
@@ -53,7 +54,11 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.Speed
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCD4DateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCondomUseDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitDateDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitEDDDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitHeightDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitTBStatusDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitTypeDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitWeightDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesWHOStagingDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDateDataDefinition;
@@ -156,8 +161,15 @@ public class DartReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Facility Transferred From", new SpeedPhasesFacilityTransferredFromDataDefinition(), null);
 
         // ----------------------------
+        dsd.addColumn("Weight", new SpeedPhasesVisitWeightDataDefinition(), null);
+        dsd.addColumn("Height", new SpeedPhasesVisitHeightDataDefinition(), null);
+        dsd.addColumn("Blood Pressure", new SpeedPhasesBloodPressureDataDefinition(), null);
+
+        dsd.addColumn("TB Status", new SpeedPhasesVisitTBStatusDataDefinition(), null);
         // new columns
         dsd.addColumn("Pregnancy Status", new PregnancyStatusDataDefinition(), null);
+        dsd.addColumn("EDD", new SpeedPhasesVisitEDDDataDefinition(), null);
+
         dsd.addColumn("FP", new SpeedPhasesFPUsageDataDefinition(), null);
         dsd.addColumn("WHO Stage", new SpeedPhasesWHOStagingDataDefinition(), null);
         dsd.addColumn("STI Screening", new SpeedPhasesSTIScreeningDataDefinition(), null);
