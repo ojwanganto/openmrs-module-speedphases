@@ -1,7 +1,7 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTOriginalRegimenDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEnrolledInOtzDataDefinition;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
@@ -18,24 +18,23 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=ARTOriginalRegimenDataDefinition.class, order=50)
-public class ARTOriginalRegimenDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=SpeedPhasesEnrolledInOtzDataDefinition.class, order=50)
+public class SpeedPhasesEnrolledInOtzDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
 
     public EvaluatedVisitData evaluate(VisitDataDefinition definition, EvaluationContext context) throws EvaluationException {
         EvaluatedVisitData c = new EvaluatedVisitData(definition, context);
-
         VisitIdSet visitIds = new VisitIdSet(VisitDataUtil.getVisitIdsForContext(context, false));
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, mid(min(concat(v.date_started, d.regimen)), 20) as regimenName\n" +
-                " from visit v \n" +
-                " left join kenyaemr_etl.etl_drug_event d on d.patient_id = v.patient_id and d.date_started <= v.date_started\n" +
-                " where v.visit_id in(:visitIds) " +
-                " group by v.visit_id ";
+        String qry = "select v.visit_id, if(pp.patient_id is not null, 'Enrolled','Not enrolled') as otzEnrollment\n" +
+                "from openmrs.visit v\n" +
+                "inner join kenyaemr_etl.etl_patient_hiv_followup fup on fup.visit_id=v.visit_id\n" +
+                "left join kenyaemr_etl.etl_patient_program pp on pp.patient_id = v.patient_id and pp.program = 'OTZ' and v.date_started between pp.date_enrolled and ifnull(pp.date_completed, curdate())\n" +
+                "where v.voided=0 and v.visit_id in(:visitIds) ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);

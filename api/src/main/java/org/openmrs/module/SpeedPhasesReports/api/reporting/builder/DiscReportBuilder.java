@@ -37,6 +37,7 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.Speed
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesBaselineVLDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesDateConfirmedHIVPositiveDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEducationLevelDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEnrolledInOtzDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEnrollmentDateCalculation;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEntryPointDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesFPUsageDataDefinition;
@@ -54,6 +55,7 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.Speed
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCD4DateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCondomUseDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitDateDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitPersonPresentDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitTypeDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesWHOStagingDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDataDefinition;
@@ -153,6 +155,7 @@ public class DiscReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("PWP Disclosure", new PWPDisclosureDataDefinition(), null);
         dsd.addColumn("Condom Provided", new SpeedPhasesVisitCondomUseDataDefinition(), null);
         dsd.addColumn("Visit Type", new SpeedPhasesVisitTypeDataDefinition(), null);
+        dsd.addColumn("Person Present", new SpeedPhasesVisitPersonPresentDataDefinition(), null);
         dsd.addColumn("Population Type", new SpeedPhasesPopulationTypeDataDefinition(), null);
         dsd.addColumn("Partner Tested", new SpeedPhasesPartnerTestedDataDefinition(), null);
         dsd.addColumn("Transfer-in Date", new SpeedPhasesTransferInDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
@@ -188,9 +191,12 @@ public class DiscReportBuilder extends AbstractReportBuilder {
 
         dsd.addColumn("Stable/Unstable", new PatientStabilityDataDefinition(), null);
         dsd.addColumn("CurrentCareModel", new DCOMDataDefinition(), null,new DCOMConverter());
+        dsd.addColumn("OTZ", new SpeedPhasesEnrolledInOtzDataDefinition(), null,null);
 
         dsd.addColumn("Exit date", new PatientDiscontinuationDateDataDefinition(), "");
         dsd.addColumn("Exit Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
+        dsd.addColumn("Stable/Unstable", new PatientStabilityDataDefinition(), null);
+        dsd.addColumn("CurrentCareModel", new DCOMDataDefinition(), null,new DCOMConverter());
 
 
         dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new CalculationResultConverter());
