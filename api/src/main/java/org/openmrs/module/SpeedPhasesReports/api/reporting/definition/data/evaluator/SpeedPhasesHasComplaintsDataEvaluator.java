@@ -1,9 +1,7 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesPartnerTestedDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesPopulationTypeDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHasComplaintsDataDefinition;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
@@ -20,8 +18,8 @@ import java.util.Map;
 /**
  * Evaluates a VisitIdDataDefinition to produce a VisitData
  */
-@Handler(supports=SpeedPhasesPopulationTypeDataDefinition.class, order=50)
-public class SpeedPhasesPopulationTypeDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=SpeedPhasesHasComplaintsDataDefinition.class, order=50)
+public class SpeedPhasesHasComplaintsDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
@@ -32,7 +30,7 @@ public class SpeedPhasesPopulationTypeDataEvaluator implements VisitDataEvaluato
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, (case fup.population_type when 164928 then 'General Population' when 164929 then 'Key Population' else '' end) pop_type \n" +
+        String qry = "select v.visit_id, (case fup.presenting_complaints when 1 then 'Yes' when 2 then 'No' else '' end) has_presenting_complaints \n" +
                 "from visit v  \n" +
                 "inner join kenyaemr_etl.etl_patient_hiv_followup fup on fup.visit_id=v.visit_id \n" +
                 "where v.voided=0 and v.visit_id in(:visitIds) ";

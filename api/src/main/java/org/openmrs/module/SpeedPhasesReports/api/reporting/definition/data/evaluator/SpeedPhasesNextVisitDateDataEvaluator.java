@@ -31,11 +31,10 @@ public class SpeedPhasesNextVisitDateDataEvaluator implements VisitDataEvaluator
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, DATE(o.value_datetime)"
-                        + " from visit v "
-                        + " inner join encounter e on e.visit_id = v.visit_id "
-                        + " inner join obs o on o.encounter_id = e.encounter_id and o.voided=0 "
-                        + " where o.concept_id in(5096) and v.visit_id in(:visitIds) ";
+        String qry = "select v.visit_id, date(fup.next_appointment_date)\n" +
+                "from visit v  \n" +
+                "inner join kenyaemr_etl.etl_patient_hiv_followup fup on fup.visit_id=v.visit_id \n" +
+                "where v.voided=0 and v.visit_id in(:visitIds) ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);

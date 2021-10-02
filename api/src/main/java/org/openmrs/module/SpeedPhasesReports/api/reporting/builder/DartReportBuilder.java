@@ -33,31 +33,53 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.Pregn
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ReasonPatientDiscontinuedDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesAgeAtARTStartCalculation;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesAgeAtProgramEnrollmentCalculation;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesBCGDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesBaselineVLDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesBaselineVLDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesBloodPressureDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesCacxScreeningDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesDateConfirmedHIVPositiveDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEducationLevelDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEnrolledInOtzDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEnhancedAdherenceScoreDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEnrollmentDateCalculation;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesEntryPointDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesFPMethodDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesFPUsageDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesFacilityTransferredFromDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHasAllergiesDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHasChronicIllnessDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHasComplaintsDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesKeyPopulationTypeDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesLMPDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesMUACDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesMeasles1DataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesNextVisitDateDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesOPV1DataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesOPV2DataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesOTZActivityAtEnrollmentDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesOTZDiscontinuationDateDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesOTZDiscontinuationReasonDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesOTZServicesDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesOVCEnrollmentDetailsDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesPartnerTestedDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesPatientOrphanDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesPenta1DataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesPenta2DataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesPopulationTypeDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesQueryDateCalculation;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesSTIScreeningDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesStiPartnerNotificationDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesTransferInDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesViralLoadDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesViralLoadDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitARTAdherenceDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCD4DataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCD4DateDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCTXAdherenceDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitCondomUseDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitEDDDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitHeightDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitPersonPresentDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitTBStatusDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitTypeDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitWeightDataDefinition;
@@ -145,19 +167,23 @@ public class DartReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Date Confirmed Positive", new SpeedPhasesDateConfirmedHIVPositiveDataDefinition(), "", new DateConverter(DATE_FORMAT));
         dsd.addColumn("Date Enrolled in Care", new CalculationDataDefinition("DOE", new SpeedPhasesEnrollmentDateCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Age at Enrollment", new CalculationDataDefinition("AgeatEnrollment", new SpeedPhasesAgeAtProgramEnrollmentCalculation()), "", new CalculationResultConverter());
+        dsd.addColumn("gc_orphan", new SpeedPhasesPatientOrphanDataDefinition(), null);
         //dsd.addColumn("Age at Enrollment", new SpeedPhasesAgeAtEnrollmentDataDefinition(), null);
         //dsd.addColumn("Age at ART Start", new SpeedPhasesAgeAtARTStartDataDefinition(), null);
         dsd.addColumn("Visit Date", new SpeedPhasesVisitDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
 
         // wave two additional columns
         dsd.addColumn("Baseline VL", new SpeedPhasesBaselineVLDataDefinition(), null);
+        dsd.addColumn("Baseline VL Date", new SpeedPhasesBaselineVLDateDataDefinition(), null);
         dsd.addColumn("ART Adherence", new SpeedPhasesVisitARTAdherenceDataDefinition(), null);
+        dsd.addColumn("CTX Adherence", new SpeedPhasesVisitCTXAdherenceDataDefinition(), null);
         dsd.addColumn("Entry Point", new SpeedPhasesEntryPointDataDefinition(), null);
         dsd.addColumn("STI Screening", new SpeedPhasesSTIScreeningDataDefinition(), null);
         dsd.addColumn("PWP Disclosure", new PWPDisclosureDataDefinition(), null);
         dsd.addColumn("Condom Provided", new SpeedPhasesVisitCondomUseDataDefinition(), null);
         dsd.addColumn("Visit Type", new SpeedPhasesVisitTypeDataDefinition(), null);
         dsd.addColumn("Population Type", new SpeedPhasesPopulationTypeDataDefinition(), null);
+        dsd.addColumn("Key Population Type", new SpeedPhasesKeyPopulationTypeDataDefinition(), null);
         dsd.addColumn("Partner Tested", new SpeedPhasesPartnerTestedDataDefinition(), null);
         dsd.addColumn("Transfer-in Date", new SpeedPhasesTransferInDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
         dsd.addColumn("Facility Transferred From", new SpeedPhasesFacilityTransferredFromDataDefinition(), null);
@@ -165,16 +191,17 @@ public class DartReportBuilder extends AbstractReportBuilder {
         // ----------------------------
         dsd.addColumn("Weight", new SpeedPhasesVisitWeightDataDefinition(), null);
         dsd.addColumn("Height", new SpeedPhasesVisitHeightDataDefinition(), null);
+        dsd.addColumn("MUAC", new SpeedPhasesMUACDataDefinition(), null);
         dsd.addColumn("Blood Pressure", new SpeedPhasesBloodPressureDataDefinition(), null);
 
         dsd.addColumn("TB Status", new SpeedPhasesVisitTBStatusDataDefinition(), null);
         // new columns
         dsd.addColumn("Pregnancy Status", new PregnancyStatusDataDefinition(), null);
+        dsd.addColumn("LMP", new SpeedPhasesLMPDataDefinition(), null);
         dsd.addColumn("EDD", new SpeedPhasesVisitEDDDataDefinition(), null);
 
         dsd.addColumn("FP", new SpeedPhasesFPUsageDataDefinition(), null);
         dsd.addColumn("WHO Stage", new SpeedPhasesWHOStagingDataDefinition(), null);
-        dsd.addColumn("STI Screening", new SpeedPhasesSTIScreeningDataDefinition(), null);
         dsd.addColumn("PWP Disclosure", new PWPDisclosureDataDefinition(), null);
         dsd.addColumn("CD4 Result", new SpeedPhasesVisitCD4DataDefinition(), null);
         dsd.addColumn("CD4 Date", new SpeedPhasesVisitCD4DateDataDefinition(), "");
@@ -192,13 +219,67 @@ public class DartReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Last ART Date", new DiscLastArtDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
         dsd.addColumn("Duration", new DiscLastArtDurationDataDefinition(), null);
 
-        dsd.addColumn("Patient Discontinued", new PatientDiscontinuedDataDefinition(), null);
+        /*dsd.addColumn("Patient Discontinued", new PatientDiscontinuedDataDefinition(), null);
         dsd.addColumn("Discontinuation Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
+        */
         dsd.addColumn("Visit Ois", new VisitOisDataDefinition(), null);
         dsd.addColumn("Visit Ois Date", new VisitOisDateDataDefinition(), null);
 
         dsd.addColumn("Stable/Unstable", new PatientStabilityDataDefinition(), null);
         dsd.addColumn("CurrentCareModel", new DCOMDataDefinition(), null,new DCOMConverter());
+
+        dsd.addColumn("gc_allergies1", new SpeedPhasesHasAllergiesDataDefinition(), null,null);
+        dsd.addColumn("gc_complains", new SpeedPhasesHasComplaintsDataDefinition(), null,null);
+        dsd.addColumn("gc_anyillness", new SpeedPhasesHasChronicIllnessDataDefinition(), null,null);
+
+        // immunizations
+        dsd.addColumn("gc_bcg", new SpeedPhasesBCGDataDefinition(), null,null);
+        dsd.addColumn("gc_pv_1", new SpeedPhasesOPV1DataDefinition(), null,null);
+        dsd.addColumn("gc_pv_2", new SpeedPhasesOPV2DataDefinition(), null,null);
+        dsd.addColumn("gc_penta_1", new SpeedPhasesPenta1DataDefinition(), null,null);
+        dsd.addColumn("gc_penta_2", new SpeedPhasesPenta2DataDefinition(), null,null);
+        dsd.addColumn("gc_measles_1", new SpeedPhasesMeasles1DataDefinition(), null,null);
+
+
+        //
+        dsd.addColumn("gc_fpmethod", new SpeedPhasesFPMethodDataDefinition(), "");
+        dsd.addColumn("gc_cacxscreen", new SpeedPhasesCacxScreeningDataDefinition(), "");
+        dsd.addColumn("STI Partner Notification", new SpeedPhasesStiPartnerNotificationDataDefinition(), null);
+        dsd.addColumn("ad_adherence_score", new SpeedPhasesEnhancedAdherenceScoreDataDefinition(), "");
+
+        // OTZ columns
+
+        dsd.addColumn("otze_enroldate", new SpeedPhasesOTZActivityAtEnrollmentDataDefinition("otzEnrollment", "visit_date"), "");
+        dsd.addColumn("otze_orientation", new SpeedPhasesOTZActivityAtEnrollmentDataDefinition("otzEnrollment", "orientation"), "");
+        dsd.addColumn("otze_participation", new SpeedPhasesOTZActivityAtEnrollmentDataDefinition("otzEnrollment", "participation"), "");
+        dsd.addColumn("otze_leadership", new SpeedPhasesOTZActivityAtEnrollmentDataDefinition("otzEnrollment", "leadership"), "");
+        dsd.addColumn("otze_descision_making", new SpeedPhasesOTZActivityAtEnrollmentDataDefinition("otzEnrollment", "making_decision_future"), "");
+        dsd.addColumn("otze_trans_adultcare", new SpeedPhasesOTZActivityAtEnrollmentDataDefinition("otzEnrollment", "transition_to_adult_care"), "");
+        dsd.addColumn("otze_treat_litracy", new SpeedPhasesOTZActivityAtEnrollmentDataDefinition("otzEnrollment", "treatment_literacy"), "");
+        dsd.addColumn("otze_SRH", new SpeedPhasesOTZActivityAtEnrollmentDataDefinition("otzEnrollment", "srh"), "");
+        dsd.addColumn("otze_bey3rd_90", new SpeedPhasesOTZActivityAtEnrollmentDataDefinition("otzEnrollment", "beyond_third_ninety"), "");
+
+        dsd.addColumn("otzv_orientation", new SpeedPhasesOTZServicesDataDefinition("otzVisit", "orientation"), "");
+        dsd.addColumn("otzv_participation", new SpeedPhasesOTZServicesDataDefinition("otzVisit", "participation"), "");
+        dsd.addColumn("otzv_leadership", new SpeedPhasesOTZServicesDataDefinition("otzVisit", "leadership"), "");
+        dsd.addColumn("otzv_descision_making", new SpeedPhasesOTZServicesDataDefinition("otzVisit", "making_decision_future"), "");
+        dsd.addColumn("otzv_trans_adultcare", new SpeedPhasesOTZServicesDataDefinition("otzVisit", "transition_to_adult_care"), "");
+        dsd.addColumn("otzv_treat_litracy", new SpeedPhasesOTZServicesDataDefinition("otzVisit", "treatment_literacy"), "");
+        dsd.addColumn("otzv_SRH", new SpeedPhasesOTZServicesDataDefinition("otzVisit", "srh"), "");
+        dsd.addColumn("otzv_bey3rd_90", new SpeedPhasesOTZServicesDataDefinition("otzVisit", "beyond_third_ninety"), "");
+        dsd.addColumn("otzv_disc_reason", new SpeedPhasesOTZDiscontinuationReasonDataDefinition(), "");
+        dsd.addColumn("otzv_disc_date", new SpeedPhasesOTZDiscontinuationDateDataDefinition(), "");
+
+        dsd.addColumn("ovc_enroldate", new SpeedPhasesOVCEnrollmentDetailsDataDefinition("ovcEnrollment", "visit_date"), "");
+        dsd.addColumn("ovc_caregivername", new SpeedPhasesOVCEnrollmentDetailsDataDefinition("ovcEnrollment", "caregiver_name"), "");
+        dsd.addColumn("ovc_caregivergender", new SpeedPhasesOVCEnrollmentDetailsDataDefinition("ovcEnrollment", "caregiver_gender"), "");
+        dsd.addColumn("ovc_caregiverphone", new SpeedPhasesOVCEnrollmentDetailsDataDefinition("ovcEnrollment", "caregiver_phone_number"), "");
+        dsd.addColumn("ovc_cpims_enrollment", new SpeedPhasesOVCEnrollmentDetailsDataDefinition("ovcEnrollment", "client_enrolled_cpims"), "");
+        dsd.addColumn("ovc_offer_partner", new SpeedPhasesOVCEnrollmentDetailsDataDefinition("ovcEnrollment", "partner_offering_ovc"), "");
+        dsd.addColumn("ovc_compmodel", new SpeedPhasesOVCEnrollmentDetailsDataDefinition("ovcEnrollment", "ovc_comprehensive_program"), "");
+        dsd.addColumn("ovc_dreamsmodel", new SpeedPhasesOVCEnrollmentDetailsDataDefinition("ovcEnrollment", "dreams_program"), "");
+        dsd.addColumn("ovc_preventiomodel", new SpeedPhasesOVCEnrollmentDetailsDataDefinition("ovcEnrollment", "ovc_preventive_program"), "");
+
 
         dsd.addColumn("Exit date", new PatientDiscontinuationDateDataDefinition(), "");
         dsd.addColumn("Exit Reason", new ReasonPatientDiscontinuedDataDefinition(), null);
