@@ -1,9 +1,7 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesARTDateMedicallyEligibleDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitHeightDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHeiVisitInfantFeedingDataDefinition;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
@@ -18,10 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Map;
 
 /**
- * Evaluates a VisitIdDataDefinition to produce a VisitData
+ * Evaluates a SpeedPhasesHeiVisitInfantFeedingDataDefinition to produce a VisitData
  */
-@Handler(supports=SpeedPhasesVisitHeightDataDefinition.class, order=50)
-public class SpeedPhasesVisitHeightDataEvaluator implements VisitDataEvaluator {
+@Handler(supports= SpeedPhasesHeiVisitInfantFeedingDataDefinition.class, order=50)
+public class SpeedPhasesHeiVisitInfantFeedingDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
@@ -32,10 +30,10 @@ public class SpeedPhasesVisitHeightDataEvaluator implements VisitDataEvaluator {
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, coalesce(fup.height,t.height) height \n" +
+        String qry = "select v.visit_id, \n" +
+                "  (case f.infant_feeding when 5526 then \"Exclusive Breastfeeding(EBF)\" when 1595 then \"Exclusive Replacement(ERF)\" when 6046 then \"Mixed Feeding(MF)\" else \"\" end) as infantFeeding\n" +
                 "from visit v  \n" +
-                "inner join kenyaemr_etl.etl_patient_hiv_followup fup on fup.visit_id=v.visit_id \n" +
-                "left join kenyaemr_etl.etl_patient_triage t on t.visit_id=v.visit_id \n" +
+                "inner join kenyaemr_etl.etl_hei_follow_up_visit f on f.visit_id=v.visit_id \n" +
                 "where v.voided=0 and v.visit_id in(:visitIds) ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();

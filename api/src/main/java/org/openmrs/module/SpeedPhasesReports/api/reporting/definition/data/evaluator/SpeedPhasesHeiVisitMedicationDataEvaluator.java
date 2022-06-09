@@ -1,9 +1,8 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.evaluator;
 
 import org.openmrs.annotation.Handler;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesARTDateMedicallyEligibleDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitHeightDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHeiVisitMedicationDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesPopulationTypeDataDefinition;
 import org.openmrs.module.reporting.data.visit.EvaluatedVisitData;
 import org.openmrs.module.reporting.data.visit.VisitDataUtil;
 import org.openmrs.module.reporting.data.visit.definition.VisitDataDefinition;
@@ -18,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Map;
 
 /**
- * Evaluates a VisitIdDataDefinition to produce a VisitData
+ * Evaluates a SpeedPhasesPopulationTypeDataDefinition to produce a VisitData
  */
-@Handler(supports=SpeedPhasesVisitHeightDataDefinition.class, order=50)
-public class SpeedPhasesVisitHeightDataEvaluator implements VisitDataEvaluator {
+@Handler(supports=SpeedPhasesHeiVisitMedicationDataDefinition.class, order=50)
+public class SpeedPhasesHeiVisitMedicationDataEvaluator implements VisitDataEvaluator {
 
     @Autowired
     private EvaluationService evaluationService;
@@ -32,12 +31,14 @@ public class SpeedPhasesVisitHeightDataEvaluator implements VisitDataEvaluator {
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, coalesce(fup.height,t.height) height \n" +
-                "from visit v  \n" +
-                "inner join kenyaemr_etl.etl_patient_hiv_followup fup on fup.visit_id=v.visit_id \n" +
-                "left join kenyaemr_etl.etl_patient_triage t on t.visit_id=v.visit_id \n" +
+        SpeedPhasesHeiVisitMedicationDataDefinition dataDefinition = (SpeedPhasesHeiVisitMedicationDataDefinition) definition;
+        String medicationName = dataDefinition.getMedicationName();
+        String qry = "select v.visit_id, fup.:medicationName \n" +
+                "from kenyaemr_etl.etl_hei_follow_up_visit fup  \n" +
+                "inner join visit v on v.visit_id=fup.visit_id \n" +
                 "where v.voided=0 and v.visit_id in(:visitIds) ";
 
+        qry = qry.replace(":medicationName", medicationName);
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
         queryBuilder.addParameter("visitIds", visitIds);

@@ -32,9 +32,10 @@ public class SpeedPhasesVisitWeightDataEvaluator implements VisitDataEvaluator {
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, fup.weight \n" +
+        String qry = "select v.visit_id, coalesce(fup.weight,t.weight) weight \n" +
                 "from visit v  \n" +
                 "inner join kenyaemr_etl.etl_patient_hiv_followup fup on fup.visit_id=v.visit_id \n" +
+                "left join kenyaemr_etl.etl_patient_triage t on t.visit_id=v.visit_id \n" +
                 "where v.voided=0 and v.visit_id in(:visitIds) ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();

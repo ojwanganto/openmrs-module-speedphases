@@ -55,29 +55,30 @@
 	<bean id="speedPhasesReports.config.report" class="org.openmrs.module.kenyacore.report.ReportConfiguration">
 		<property name="commonReports">
 			<set>
+				<!--
 				<ref bean="speedPhasesReports.common.report.speedReport" />
-<!--
 				<ref bean="speedPhasesReports.common.report.phaseReport" />
--->
 				<ref bean="speedPhasesReports.common.report.speedTenToTwentyFour" />
 				<ref bean="speedPhasesReports.common.report.speedZeroToFourty" />
 				<ref bean="speedPhasesReports.common.report.discReport" />
-				<ref bean="speedPhasesReports.common.report.dartReport"/>
+				<ref bean="speedPhasesReports.common.report.dartReport"/>-->
+				<ref bean="speedPhasesReports.common.report.lisheBoraHeiVisitReport"/>
+				<ref bean="speedPhasesReports.common.report.lisheBoraHivVisitReport"/>
 			</set>
 		</property>
 	</bean>
 
 
-	<bean id="speedPhasesReports.app.reports" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
+	<!--<bean id="speedPhasesReports.app.reports" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
 		<constructor-arg value="SpeedPhasesReports.reports" />
 		<constructor-arg value="Speed and Phases Module" />
 		<constructor-arg value="SpeedPhasesReports/speedPhasesStudyHome.page" />
 		<constructor-arg value="SpeedPhasesReports:apps/hrs_report-icon.gif" />
 		<constructor-arg value="1100000" />
-	</bean>
+	</bean>-->
 
 	<!--Add reports here -->
-	<bean id="speedPhasesReports.common.report.speedReport" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+<!--	<bean id="speedPhasesReports.common.report.speedReport" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
 		<property name="targetUuid" value="68bf24e9-e950-41f2-9246-c9c753c904ed" />
 		<property name="name" value="SPEED study Report" />
 		<property name="description" value="Report for SPEED Study" />
@@ -141,6 +142,30 @@
 		<property name="targetUuid" value="ca569f57-b474-40af-9496-74c007debbc0" />
 		<property name="name" value="DART Study Report" />
 		<property name="description" value="DART Study Report" />
+		<property name="apps">
+			<set>
+				<ref bean="kenyaemr.app.reports" />
+			</set></property>
+		<property name="template" value="SpeedPhasesReports:dartReportTemplate.xls" />
+		<property name="repeatingSection" value="sheet:1,row:6,dataset:VisitInformation" />
+	</bean>-->
+
+	<bean id="speedPhasesReports.common.report.lisheBoraHivVisitReport" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+		<property name="targetUuid" value="b7f70f9b-fd31-4691-b145-e2bb4639485f" />
+		<property name="name" value="Lishe Bora HIV visit Report" />
+		<property name="description" value="Lishe Bora HIV follow-up visit Report" />
+		<property name="apps">
+			<set>
+				<ref bean="kenyaemr.app.reports" />
+			</set></property>
+		<property name="template" value="SpeedPhasesReports:dartReportTemplate.xls" />
+		<property name="repeatingSection" value="sheet:1,row:6,dataset:VisitInformation" />
+	</bean>
+
+	<bean id="speedPhasesReports.common.report.lisheBoraHeiVisitReport" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+		<property name="targetUuid" value="87e5600b-3cd0-4687-8f92-8e7c9a0b7858" />
+		<property name="name" value="Lishe Bora HEI visit Report" />
+		<property name="description" value="Lishe Bora HEI follow-up visit Report" />
 		<property name="apps">
 			<set>
 				<ref bean="kenyaemr.app.reports" />

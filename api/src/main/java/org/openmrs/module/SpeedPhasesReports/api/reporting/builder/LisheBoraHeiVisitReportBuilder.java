@@ -1,0 +1,148 @@
+/**
+ * The contents of this file are subject to the OpenMRS Public License
+ * Version 1.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://license.openmrs.org
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+ */
+
+package org.openmrs.module.SpeedPhasesReports.api.reporting.builder;
+
+import org.openmrs.PatientIdentifierType;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.HeiMedicationGivenConverter;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DefaultFacilityDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesBirthWeightDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHasTreatmentSupporterDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHeiVisitInfantFeedingDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHeiVisitMedicationDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesTreatmentSupporterRelationshipDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitDateDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitHeightDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitWeightDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.LisheBoraHeiVisitCohortDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
+import org.openmrs.module.kenyacore.report.ReportDescriptor;
+import org.openmrs.module.kenyacore.report.ReportUtils;
+import org.openmrs.module.kenyacore.report.builder.AbstractReportBuilder;
+import org.openmrs.module.kenyacore.report.builder.Builds;
+import org.openmrs.module.kenyaemr.metadata.HivMetadata;
+import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIEnrollmentDateDataDefinition;
+import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIInfantProphylaxisDataDefinition;
+import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEILinkageToCareCCCNoDataDefinition;
+import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIMotherARVRegimenDataDefinition;
+import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIMotherCCCNumberDataDefinition;
+import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIMotherOnARVDataDefinition;
+import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIMothersNameAndTelephoneDataDefinition;
+import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIRelationToInfantDataDefinition;
+import org.openmrs.module.metadatadeploy.MetadataUtils;
+import org.openmrs.module.reporting.data.DataDefinition;
+import org.openmrs.module.reporting.data.converter.BirthdateConverter;
+import org.openmrs.module.reporting.data.converter.DataConverter;
+import org.openmrs.module.reporting.data.converter.DateConverter;
+import org.openmrs.module.reporting.data.converter.ObjectFormatter;
+import org.openmrs.module.reporting.data.patient.definition.ConvertedPatientDataDefinition;
+import org.openmrs.module.reporting.data.patient.definition.PatientIdDataDefinition;
+import org.openmrs.module.reporting.data.patient.definition.PatientIdentifierDataDefinition;
+import org.openmrs.module.reporting.data.person.definition.BirthdateDataDefinition;
+import org.openmrs.module.reporting.data.person.definition.ConvertedPersonDataDefinition;
+import org.openmrs.module.reporting.data.person.definition.GenderDataDefinition;
+import org.openmrs.module.reporting.data.person.definition.PreferredNameDataDefinition;
+import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
+import org.openmrs.module.reporting.dataset.definition.VisitDataSetDefinition;
+import org.openmrs.module.reporting.evaluation.parameter.Mapped;
+import org.openmrs.module.reporting.evaluation.parameter.Parameter;
+import org.openmrs.module.reporting.report.definition.ReportDefinition;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+@Component
+@Builds({"speedPhasesReports.common.report.lisheBoraHeiVisitReport"})
+public class LisheBoraHeiVisitReportBuilder extends AbstractReportBuilder {
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+
+    @Override
+    protected List<Parameter> getParameters(ReportDescriptor descriptor) {
+        return Arrays.asList(
+                new Parameter("startDate", "Start Date", Date.class),
+                new Parameter("endDate", "End Date", Date.class),
+                new Parameter("dateBasedReporting", "", String.class)
+        );
+    }
+
+    @Override
+    protected List<Mapped<DataSetDefinition>> buildDataSets(ReportDescriptor reportDescriptor, ReportDefinition reportDefinition) {
+        return Arrays.asList(
+                ReportUtils.map(datasetColumns(), "startDate=${startDate},endDate=${endDate}")
+        );
+    }
+
+    protected DataSetDefinition datasetColumns() {
+        VisitDataSetDefinition dsd = new VisitDataSetDefinition();
+        dsd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+        dsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+        dsd.setName("VisitInformation");
+        dsd.setDescription("Visit information");
+
+        DataConverter nameFormatter = new ObjectFormatter("{familyName}, {givenName}");
+        DataDefinition nameDef = new ConvertedPersonDataDefinition("name", new PreferredNameDataDefinition(), nameFormatter);
+
+
+        PatientIdentifierType upn = MetadataUtils.existing(PatientIdentifierType.class, HivMetadata._PatientIdentifierType.UNIQUE_PATIENT_NUMBER);
+        PatientIdentifierType heiId = MetadataUtils.existing(PatientIdentifierType.class, ModuleUtils.HEI_UNIQUE_NUMBER);
+
+        DataConverter identifierFormatter = new ObjectFormatter("{identifier}");
+        DataDefinition identifierDef = new ConvertedPatientDataDefinition("identifier", new PatientIdentifierDataDefinition(upn.getName(), upn), identifierFormatter);
+        DataDefinition heiIdDef = new ConvertedPatientDataDefinition("identifier", new PatientIdentifierDataDefinition(heiId.getName(), heiId), identifierFormatter);
+
+
+        dsd.addColumn("id", new PatientIdDataDefinition(), "");
+        dsd.addColumn("Name", nameDef, "");
+        dsd.addColumn("DOB", new BirthdateDataDefinition(), "", new BirthdateConverter(DATE_FORMAT));
+        dsd.addColumn("Sex", new GenderDataDefinition(), "");
+        dsd.addColumn("HEI ID", heiIdDef, null);
+        dsd.addColumn("CCC Number", identifierDef, null);
+
+        dsd.addColumn("Treatment Supporter", new SpeedPhasesHasTreatmentSupporterDataDefinition(), null);
+        dsd.addColumn("Treatment Supporter Relationship", new SpeedPhasesTreatmentSupporterRelationshipDataDefinition(), null);
+        dsd.addColumn("HEI Enrollment Date", new HEIEnrollmentDateDataDefinition(), null);
+        dsd.addColumn("Mothers Name and Phone", new HEIMothersNameAndTelephoneDataDefinition(),"");
+
+        dsd.addColumn("Maternal CCC Number", new HEIMotherCCCNumberDataDefinition(), null);
+        dsd.addColumn("Relation to infant", new HEIRelationToInfantDataDefinition(), null);
+        dsd.addColumn("Birth Weight", new SpeedPhasesBirthWeightDataDefinition(), null);
+        dsd.addColumn("Mother on ART at enrolment of infant", new HEIMotherOnARVDataDefinition(), null);
+        dsd.addColumn("Mother ART Regimen", new HEIMotherARVRegimenDataDefinition(), null);
+        dsd.addColumn("Infant prophylaxis", new HEIInfantProphylaxisDataDefinition(), null);
+
+        dsd.addColumn("Visit Date", new SpeedPhasesVisitDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
+
+        dsd.addColumn("Weight", new SpeedPhasesVisitWeightDataDefinition(), null);
+        dsd.addColumn("Height", new SpeedPhasesVisitHeightDataDefinition(), null);
+        dsd.addColumn("Infant feeding", new SpeedPhasesHeiVisitInfantFeedingDataDefinition(), null);
+
+
+        dsd.addColumn("AZT Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "azt_given"),"", new HeiMedicationGivenConverter());
+        dsd.addColumn("NPV Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "nvp_given"),"", new HeiMedicationGivenConverter());
+        dsd.addColumn("CTX Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "ctx_given"),"", new HeiMedicationGivenConverter());
+
+        dsd.addColumn("Facility Name", new DefaultFacilityDataDefinition("Facility Name", "facilityName"),"");
+        dsd.addColumn("Facility MFL Code", new DefaultFacilityDataDefinition("Facility MFL Code", "siteCode"),"");
+
+
+        LisheBoraHeiVisitCohortDefinition cd = new LisheBoraHeiVisitCohortDefinition();
+        cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+        cd.addParameter(new Parameter("endDate", "End Date", Date.class));
+        dsd.addRowFilter(cd, "startDate=${startDate},endDate=${endDate}");
+        return dsd;
+
+    }
+}
