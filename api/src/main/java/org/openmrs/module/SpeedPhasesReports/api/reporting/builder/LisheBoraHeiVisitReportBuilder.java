@@ -15,31 +15,19 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.builder;
 
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.HEIOutcomeConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.HeiMedicationGivenConverter;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DefaultFacilityDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesBirthWeightDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHasTreatmentSupporterDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHeiVisitInfantFeedingDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesHeiVisitMedicationDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesTreatmentSupporterRelationshipDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitDateDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitHeightDataDefinition;
-import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesVisitWeightDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.*;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.LisheBoraHeiVisitCohortDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.kenyacore.report.ReportDescriptor;
 import org.openmrs.module.kenyacore.report.ReportUtils;
 import org.openmrs.module.kenyacore.report.builder.AbstractReportBuilder;
 import org.openmrs.module.kenyacore.report.builder.Builds;
+import org.openmrs.module.kenyacore.report.data.patient.definition.CalculationDataDefinition;
 import org.openmrs.module.kenyaemr.metadata.HivMetadata;
-import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIEnrollmentDateDataDefinition;
-import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIInfantProphylaxisDataDefinition;
-import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEILinkageToCareCCCNoDataDefinition;
-import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIMotherARVRegimenDataDefinition;
-import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIMotherCCCNumberDataDefinition;
-import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIMotherOnARVDataDefinition;
-import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIMothersNameAndTelephoneDataDefinition;
-import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.HEIRelationToInfantDataDefinition;
+import org.openmrs.module.kenyaemr.reporting.data.converter.CalculationResultConverter;
+import org.openmrs.module.kenyaemr.reporting.data.converter.definition.hei.*;
 import org.openmrs.module.metadatadeploy.MetadataUtils;
 import org.openmrs.module.reporting.data.DataDefinition;
 import org.openmrs.module.reporting.data.converter.BirthdateConverter;
@@ -108,34 +96,37 @@ public class LisheBoraHeiVisitReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Name", nameDef, "");
         dsd.addColumn("DOB", new BirthdateDataDefinition(), "", new BirthdateConverter(DATE_FORMAT));
         dsd.addColumn("Sex", new GenderDataDefinition(), "");
-        dsd.addColumn("HEI ID", heiIdDef, null);
+        dsd.addColumn("HEI Unique Number", heiIdDef, null);
         dsd.addColumn("CCC Number", identifierDef, null);
 
-        dsd.addColumn("Treatment Supporter", new SpeedPhasesHasTreatmentSupporterDataDefinition(), null);
-        dsd.addColumn("Treatment Supporter Relationship", new SpeedPhasesTreatmentSupporterRelationshipDataDefinition(), null);
-        dsd.addColumn("HEI Enrollment Date", new HEIEnrollmentDateDataDefinition(), null);
+        dsd.addColumn("HEI Enrollment Date", new HEIEnrollmentDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
         dsd.addColumn("Mothers Name and Phone", new HEIMothersNameAndTelephoneDataDefinition(),"");
 
-        dsd.addColumn("Maternal CCC Number", new HEIMotherCCCNumberDataDefinition(), null);
-        dsd.addColumn("Relation to infant", new HEIRelationToInfantDataDefinition(), null);
+        dsd.addColumn("Mother CCC Number", new HEIMotherCCCNumberDataDefinition(), null);
         dsd.addColumn("Birth Weight", new SpeedPhasesBirthWeightDataDefinition(), null);
-        dsd.addColumn("Mother on ART at enrolment of infant", new HEIMotherOnARVDataDefinition(), null);
+        dsd.addColumn("Mother received Drugs for PMTCT", new HEIMotherOnPMTCTDrugsDataDefinition(), null);
+        dsd.addColumn("PMTCT Drug combination", new HEIMotherOnARVDataDefinition(), null);
+        dsd.addColumn("Mother on ART at enrolment of infant", new HeiMotherOnHaartAtEnrolmentDataDefinition(), null);
         dsd.addColumn("Mother ART Regimen", new HEIMotherARVRegimenDataDefinition(), null);
-        dsd.addColumn("Infant prophylaxis", new HEIInfantProphylaxisDataDefinition(), null);
+        dsd.addColumn("Infant prophylaxis", new HEIInfantProphylaxisDataDefinition(), null); //To be reviewed to capture more options as in the EMR
 
         dsd.addColumn("Visit Date", new SpeedPhasesVisitDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
 
         dsd.addColumn("Weight", new SpeedPhasesVisitWeightDataDefinition(), null);
         dsd.addColumn("Height", new SpeedPhasesVisitHeightDataDefinition(), null);
         dsd.addColumn("Infant feeding", new SpeedPhasesHeiVisitInfantFeedingDataDefinition(), null);
+        //dsd.addColumn("Mother's VL", new SpeedPhasesMothersLastVLDataDefinition(), null);
 
 
         dsd.addColumn("AZT Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "azt_given"),"", new HeiMedicationGivenConverter());
-        dsd.addColumn("NPV Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "nvp_given"),"", new HeiMedicationGivenConverter());
+        dsd.addColumn("NVP Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "nvp_given"),"", new HeiMedicationGivenConverter());
         dsd.addColumn("CTX Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "ctx_given"),"", new HeiMedicationGivenConverter());
-
+        dsd.addColumn("HEI Outcome", new HEIOutcomeDataDefinition(),"", new HEIOutcomeConverter());
+        dsd.addColumn("Baseline VL", new SpeedPhasesBaselineVLDataDefinition(), null);
         dsd.addColumn("Facility Name", new DefaultFacilityDataDefinition("Facility Name", "facilityName"),"");
         dsd.addColumn("Facility MFL Code", new DefaultFacilityDataDefinition("Facility MFL Code", "siteCode"),"");
+        dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new CalculationResultConverter());
+
 
 
         LisheBoraHeiVisitCohortDefinition cd = new LisheBoraHeiVisitCohortDefinition();
