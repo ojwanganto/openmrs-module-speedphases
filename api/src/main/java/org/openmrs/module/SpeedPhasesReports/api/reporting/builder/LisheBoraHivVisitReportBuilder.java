@@ -100,55 +100,38 @@ public class LisheBoraHivVisitReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("HEI ID", heiIdDef, null);
         dsd.addColumn("Unique Patient Number", identifierDef, null);
         dsd.addColumn("gc_orphan", new SpeedPhasesPatientOrphanDataDefinition(), null);
+        dsd.addColumn("Entry Point", new SpeedPhasesEntryPointDataDefinition(), null);
 
         dsd.addColumn("Date Confirmed Positive", new SpeedPhasesDateConfirmedHIVPositiveDataDefinition(), "", new DateConverter(DATE_FORMAT));
         dsd.addColumn("Date Enrolled in Care", new CalculationDataDefinition("DOE", new SpeedPhasesEnrollmentDateCalculation()), "", new CalculationResultConverter());
-        dsd.addColumn("Art Start Date", new ETLArtStartDateDataDefinition(), "", new DateConverter(DATE_FORMAT));
-        dsd.addColumn("First Regimen", new ETLFirstRegimenDataDefinition(), "");
+        dsd.addColumn("Age at Enrollment", new CalculationDataDefinition("AgeatEnrollment", new SpeedPhasesAgeAtProgramEnrollmentCalculation()), "", new CalculationResultConverter());
 
-        // -------------
+        dsd.addColumn("Art Start Date", new ETLArtStartDateDataDefinition(), "", new DateConverter(DATE_FORMAT));
+        dsd.addColumn("Regimen", new ETLFirstRegimenDataDefinition(), "");
+
         dsd.addColumn("Weight at enrollment", new CalculationDataDefinition("Weight at enrollment", new SpeedPhasesWeightAtEnrollmentCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Height at enrollment", new CalculationDataDefinition("Height at enrollment", new SpeedPhasesHeightAtEnrollmentCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("MUAC at enrollment", new CalculationDataDefinition("MUAC at enrollment", new SpeedPhasesMuacAtEnrollmentCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("WHO Stage at enrollment", new CalculationDataDefinition("WHO Stage at enrollment", new SpeedPhasesWhoStageAtEnrollmentCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Baseline VL", new CalculationDataDefinition("Baseline VL", new SpeedPhasesBaselineVLAtEnrollmentCalculation()), "", new CalculationResultConverter());
-        dsd.addColumn("Baseline VL Date1", new CalculationDataDefinition("Baseline VL Date", new SpeedPhasesBaselineVLDateAtEnrollmentCalculation()), "", new CalculationResultConverter());
+        dsd.addColumn("Baseline VL Date", new CalculationDataDefinition("Baseline VL Date", new SpeedPhasesBaselineVLDateAtEnrollmentCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Baseline CD4", new CalculationDataDefinition("Baseline CD4", new SpeedPhasesCD4AtEnrollmentStartCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Breastfeeding at enrollment", new CalculationDataDefinition("Breastfeeding at enrollment", new SpeedPhasesBreastfeedingAtEnrollmentCalculation()), "", new CalculationResultConverter());
-        dsd.addColumn("Nutritional status", new SpeedPhasesNutritionalStatusDataDefinition(), "");
 
-
-
-        //------------
         dsd.addColumn("Visit Date", new SpeedPhasesVisitDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
 
         dsd.addColumn("Weight", new SpeedPhasesVisitWeightDataDefinition(), null);
         dsd.addColumn("Height", new SpeedPhasesVisitHeightDataDefinition(), null);
 
         dsd.addColumn("MUAC", new SpeedPhasesMUACDataDefinition(), null);
-
-        dsd.addColumn("Transfer-in Date", new SpeedPhasesTransferInDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
-        dsd.addColumn("Facility Transferred From", new SpeedPhasesFacilityTransferredFromDataDefinition(), null);
-
-        // ----------------------------
-        dsd.addColumn("First WHO Stage", new ObsForPersonDataDefinition("First WHO Stage", TimeQualifier.FIRST, Dictionary.getConcept(Dictionary.CURRENT_WHO_STAGE), null, null), "", new WHOStageDataConverter());
-        dsd.addColumn("First CD4 Count", new ObsForPersonDataDefinition("First CD4 Count", TimeQualifier.FIRST, Dictionary.getConcept(Dictionary.CD4_COUNT), null, null), "", new ObsValueNumericConverter(1));
-
-        dsd.addColumn("CD4 Result", new SpeedPhasesVisitCD4DataDefinition(), null);
-        dsd.addColumn("CD4 Date", new SpeedPhasesVisitCD4DateDataDefinition(), "");
-
-       /* dsd.addColumn("Baseline VL", new ETLFirstVLResultDataDefinition(), null);
-        dsd.addColumn("Baseline VL Date", new ETLFirstVLDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
-*/
-        dsd.addColumn("StartRegimen", new ARTOriginalRegimenDataDefinition(), null);
-        dsd.addColumn("StartRegimen Line", new ARTOriginalRegimenLineDataDefinition(), null);
-
-        // -----------------
-
-
+        dsd.addColumn("WHO Stage", new SpeedPhasesWHOStagingDataDefinition(), null);
+        dsd.addColumn("VL Result", new SpeedPhasesViralLoadDataDefinition(), null);
+        dsd.addColumn("VL Date", new SpeedPhasesViralLoadDateDataDefinition(), "");
+        dsd.addColumn("Nutritional status", new SpeedPhasesNutritionalStatusDataDefinition(), "");
         dsd.addColumn("Next Visit Date", new SpeedPhasesNextVisitDateDataDefinition(), "", new DateConverter(DATE_FORMAT));
+        dsd.addColumn("Facility Name", new DefaultFacilityDataDefinition("Facility Name", "facilityName"),"");
 
-
+        dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new CalculationResultConverter());
 
         LisheBoraHivVisitCohortDefinition cd = new LisheBoraHivVisitCohortDefinition();
         cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
