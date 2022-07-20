@@ -61,7 +61,7 @@
 				<ref bean="speedPhasesReports.common.report.speedTenToTwentyFour" />
 				<ref bean="speedPhasesReports.common.report.speedZeroToFourty" />
 				<ref bean="speedPhasesReports.common.report.discReport" />-->
-				<!--<ref bean="speedPhasesReports.common.report.dartReport"/>-->
+				<ref bean="speedPhasesReports.common.report.dartReport"/>
 				<ref bean="speedPhasesReports.common.report.lisheBoraHeiVisitReport"/>
 				<ref bean="speedPhasesReports.common.report.lisheBoraHivVisitReport"/>
 			</set>

@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
  * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
- *
+ * <p>
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
@@ -49,23 +49,26 @@ public class SpeedPhasesWeightAtEnrollmentCalculation extends AbstractPatientCal
         CalculationResultMap ret = new CalculationResultMap();
         for (Integer ptId : cohort) {
             SimpleResult result = null;
-            Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
 
-            ListResult heightObsResult = (ListResult) heightObss.get(ptId);
+            if (hivEnrollmentMap.get(ptId) != null) {
+                Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
+                ListResult heightObsResult = (ListResult) heightObss.get(ptId);
 
-            if (enrollmentDate != null && heightObsResult != null && !heightObsResult.isEmpty()) {
-                List<Obs> weight = CalculationUtils.extractResultValues(heightObsResult);
-                Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(weight, enrollmentDate);
+                if (enrollmentDate != null && heightObsResult != null && !heightObsResult.isEmpty()) {
+                    List<Obs> weight = CalculationUtils.extractResultValues(heightObsResult);
+                    Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(weight, enrollmentDate);
 
-                if (lastBeforeEnrollment != null) {
-                    Double heightValue = lastBeforeEnrollment.getValueNumeric();
-                    if (heightValue != null) {
-                        result = new SimpleResult(heightValue, this);
+                    if (lastBeforeEnrollment != null) {
+                        Double heightValue = lastBeforeEnrollment.getValueNumeric();
+                        if (heightValue != null) {
+                            result = new SimpleResult(heightValue, this);
+                        }
                     }
                 }
-            }
 
+            }
             ret.put(ptId, result);
+
         }
         return ret;
     }

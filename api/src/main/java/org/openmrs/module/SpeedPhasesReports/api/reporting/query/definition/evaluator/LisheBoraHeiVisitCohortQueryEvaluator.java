@@ -3,7 +3,6 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.eva
 import org.openmrs.annotation.Handler;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.LisheBoraHeiVisitCohortDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.SpeedPhasesStudyVisitQuery;
-import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
@@ -30,12 +29,13 @@ public class LisheBoraHeiVisitCohortQueryEvaluator implements VisitQueryEvaluato
         context = ObjectUtil.nvl(context, new EvaluationContext());
         VisitQueryResult queryResult = new VisitQueryResult(definition, context);
 
-        List<Integer> cohort = ModuleUtils.getLisheBoraCohort();
+        //List<Integer> cohort = ModuleUtils.getLisheBoraCohort();
         String qry = "select f.visit_id \n" +
-                "from kenyaemr_etl.etl_hei_follow_up_visit f\n" +
-                "inner join person p on p.person_id = f.patient_id \n" +
-                "inner join  kenyaemr_etl.etl_hei_enrollment e on e.patient_id = f.patient_id\n" +
-                "where  f.patient_id in (:patientList) and f.visit_id is not null and datediff(f.visit_date, p.birthdate) div 365.25 between 0 and 2";
+                " from kenyaemr_etl.etl_hei_follow_up_visit f\n" +
+                " inner join person p on p.person_id = f.patient_id\n" +
+                " inner join  kenyaemr_etl.etl_hei_enrollment e on e.patient_id = f.patient_id\n" +
+                " where  f.visit_id is not null and f.visit_date between date(:startDate) and date(:endDate) and datediff(f.visit_date, p.birthdate) div 365.25 between 0 and 2;";
+               // "where  f.patient_id in (:patientList) and f.visit_id is not null and datediff(f.visit_date, p.birthdate) div 365.25 between 0 and 2";
 
         SqlQueryBuilder builder = new SqlQueryBuilder();
 
@@ -45,7 +45,7 @@ public class LisheBoraHeiVisitCohortQueryEvaluator implements VisitQueryEvaluato
         builder.append(qry);
         builder.addParameter("startDate", startDate);
         builder.addParameter("endDate", endDate);
-        builder.addParameter("patientList", cohort);
+       // builder.addParameter("patientList", cohort);
 
         List<Integer> results = evaluationService.evaluateToList(builder, Integer.class, context);
         queryResult.getMemberIds().addAll(results);

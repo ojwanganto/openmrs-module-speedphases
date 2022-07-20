@@ -16,6 +16,7 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.builder;
 
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.calculation.*;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.DrugHistoryConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.*;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.LisheBoraHivVisitCohortDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.util.ModuleUtils;
@@ -81,7 +82,7 @@ public class LisheBoraHivVisitReportBuilder extends AbstractReportBuilder {
         dsd.setName("VisitInformation");
         dsd.setDescription("Visit information");
 
-        DataConverter nameFormatter = new ObjectFormatter("{familyName}, {givenName}");
+        DataConverter nameFormatter = new ObjectFormatter("{givenName} {middleName} {familyName}");
         DataDefinition nameDef = new ConvertedPersonDataDefinition("name", new PreferredNameDataDefinition(), nameFormatter);
 
 
@@ -117,6 +118,18 @@ public class LisheBoraHivVisitReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Baseline VL Date", new CalculationDataDefinition("Baseline VL Date", new SpeedPhasesBaselineVLDateAtEnrollmentCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Baseline CD4", new CalculationDataDefinition("Baseline CD4", new SpeedPhasesCD4AtEnrollmentStartCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Breastfeeding at enrollment", new CalculationDataDefinition("Breastfeeding at enrollment", new SpeedPhasesBreastfeedingAtEnrollmentCalculation()), "", new CalculationResultConverter());
+
+        dsd.addColumn("PMTCT Drug", new CalculationDataDefinition("PMTCT Drug", new SpeedPhasesDrugUseAtEnrollmentCalculation()), "", new DrugHistoryConverter("purpose", "PMTCT"));
+        dsd.addColumn("PMTCT Drug Regimen", new CalculationDataDefinition("PMTCT Drug", new SpeedPhasesDrugUseAtEnrollmentCalculation()), "", new DrugHistoryConverter("regimen", "PMTCT"));
+        dsd.addColumn("PMTCT Drug Date", new CalculationDataDefinition("PMTCT Drug Date", new SpeedPhasesDrugUseAtEnrollmentCalculation()), "", new DrugHistoryConverter("date", "PMTCT"));
+
+        dsd.addColumn("PEP Drug", new CalculationDataDefinition("PEP Drug", new SpeedPhasesDrugUseAtEnrollmentCalculation()), "", new DrugHistoryConverter("purpose", "PEP"));
+        dsd.addColumn("PEP Drug Regimen", new CalculationDataDefinition("PEP Drug", new SpeedPhasesDrugUseAtEnrollmentCalculation()), "", new DrugHistoryConverter("regimen", "PEP"));
+        dsd.addColumn("PEP Drug Date", new CalculationDataDefinition("PEP Drug Date", new SpeedPhasesDrugUseAtEnrollmentCalculation()), "", new DrugHistoryConverter("date", "PEP"));
+
+        dsd.addColumn("PREP Drug", new CalculationDataDefinition("PREP Drug", new SpeedPhasesDrugUseAtEnrollmentCalculation()), "", new DrugHistoryConverter("purpose", "PREP"));
+        dsd.addColumn("PREP Drug Regimen", new CalculationDataDefinition("PREP Drug", new SpeedPhasesDrugUseAtEnrollmentCalculation()), "", new DrugHistoryConverter("regimen", "PREP"));
+        dsd.addColumn("PREP Drug Date", new CalculationDataDefinition("PREP Drug Date", new SpeedPhasesDrugUseAtEnrollmentCalculation()), "", new DrugHistoryConverter("date", "PREP"));
 
         dsd.addColumn("Visit Date", new SpeedPhasesVisitDateDataDefinition(),"", new DateConverter(DATE_FORMAT));
 

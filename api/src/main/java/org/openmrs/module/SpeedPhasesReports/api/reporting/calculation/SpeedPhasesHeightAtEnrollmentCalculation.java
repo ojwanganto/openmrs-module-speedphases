@@ -41,30 +41,31 @@ public class SpeedPhasesHeightAtEnrollmentCalculation extends AbstractPatientCal
     @Override
     public CalculationResultMap evaluate(Collection<Integer> cohort, Map<String, Object> parameterValues, PatientCalculationContext context) {
 
-        Concept currentWeight = Dictionary.getConcept(Dictionary.HEIGHT_CM);
+        Concept heightConcept = Dictionary.getConcept(Dictionary.HEIGHT_CM);
         CalculationResultMap hivEnrollmentMap = Calculations.firstEncounter(MetadataUtils.existing(EncounterType.class, HivMetadata._EncounterType.HIV_ENROLLMENT), cohort, context);
 
-        CalculationResultMap weightObss = Calculations.allObs(currentWeight, cohort, context);
+        CalculationResultMap weightObss = Calculations.allObs(heightConcept, cohort, context);
 
         CalculationResultMap ret = new CalculationResultMap();
         for (Integer ptId : cohort) {
             SimpleResult result = null;
-            Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
+            if (hivEnrollmentMap.get(ptId) != null) {
+                Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
 
-            ListResult weightObsResult = (ListResult) weightObss.get(ptId);
+                ListResult heightObsResult = (ListResult) weightObss.get(ptId);
 
-            if (enrollmentDate != null && weightObsResult != null && !weightObsResult.isEmpty()) {
-                List<Obs> weight = CalculationUtils.extractResultValues(weightObsResult);
-                Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(weight, enrollmentDate);
+                if (enrollmentDate != null && heightObsResult != null && !heightObsResult.isEmpty()) {
+                    List<Obs> height = CalculationUtils.extractResultValues(heightObsResult);
+                    Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(height, enrollmentDate);
 
-                if (lastBeforeEnrollment != null) {
-                    Double weightValue = lastBeforeEnrollment.getValueNumeric();
-                    if (weightValue != null) {
-                        result = new SimpleResult(weightValue, this);
+                    if (lastBeforeEnrollment != null) {
+                        Double weightValue = lastBeforeEnrollment.getValueNumeric();
+                        if (weightValue != null) {
+                            result = new SimpleResult(weightValue, this);
+                        }
                     }
                 }
             }
-
             ret.put(ptId, result);
         }
         return ret;

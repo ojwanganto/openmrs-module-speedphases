@@ -15,6 +15,8 @@
 package org.openmrs.module.SpeedPhasesReports.api.reporting.builder;
 
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.calculation.SpeedPhasesBaselineVLAtEnrollmentCalculation;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.calculation.SpeedPhasesBaselineVLDateAtEnrollmentCalculation;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.HEIOutcomeConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.converter.HeiMedicationGivenConverter;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.*;
@@ -80,7 +82,7 @@ public class LisheBoraHeiVisitReportBuilder extends AbstractReportBuilder {
         dsd.setName("VisitInformation");
         dsd.setDescription("Visit information");
 
-        DataConverter nameFormatter = new ObjectFormatter("{familyName}, {givenName}");
+        DataConverter nameFormatter = new ObjectFormatter("{givenName} {middleName} {familyName}");
         DataDefinition nameDef = new ConvertedPersonDataDefinition("name", new PreferredNameDataDefinition(), nameFormatter);
 
 
@@ -100,7 +102,7 @@ public class LisheBoraHeiVisitReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("CCC Number", identifierDef, null);
 
         dsd.addColumn("HEI Enrollment Date", new HEIEnrollmentDateDataDefinition(), null, new DateConverter(DATE_FORMAT));
-        dsd.addColumn("Mothers Name and Phone", new HEIMothersNameAndTelephoneDataDefinition(),"");
+        dsd.addColumn("Mothers Phone", new SpeedPhasesMothersPhoneDataDefinition(),"");
 
         dsd.addColumn("Mother CCC Number", new HEIMotherCCCNumberDataDefinition(), null);
         dsd.addColumn("Birth Weight", new SpeedPhasesBirthWeightDataDefinition(), null);
@@ -115,16 +117,14 @@ public class LisheBoraHeiVisitReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Weight", new SpeedPhasesVisitWeightDataDefinition(), null);
         dsd.addColumn("Height", new SpeedPhasesVisitHeightDataDefinition(), null);
         dsd.addColumn("Infant feeding", new SpeedPhasesHeiVisitInfantFeedingDataDefinition(), null);
-        //dsd.addColumn("Mother's VL", new SpeedPhasesMothersLastVLDataDefinition(), null);
-
 
         dsd.addColumn("AZT Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "azt_given"),"", new HeiMedicationGivenConverter());
         dsd.addColumn("NVP Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "nvp_given"),"", new HeiMedicationGivenConverter());
         dsd.addColumn("CTX Given", new SpeedPhasesHeiVisitMedicationDataDefinition("Medication given", "ctx_given"),"", new HeiMedicationGivenConverter());
         dsd.addColumn("HEI Outcome", new HEIOutcomeDataDefinition(),"", new HEIOutcomeConverter());
-        dsd.addColumn("Baseline VL", new SpeedPhasesBaselineVLDataDefinition(), null);
+        dsd.addColumn("Baseline VL", new CalculationDataDefinition("Baseline VL", new SpeedPhasesBaselineVLAtEnrollmentCalculation()), "", new CalculationResultConverter());
+        dsd.addColumn("Baseline VL Date", new CalculationDataDefinition("Baseline VL Date", new SpeedPhasesBaselineVLDateAtEnrollmentCalculation()), "", new CalculationResultConverter());
         dsd.addColumn("Facility Name", new DefaultFacilityDataDefinition("Facility Name", "facilityName"),"");
-        dsd.addColumn("Facility MFL Code", new DefaultFacilityDataDefinition("Facility MFL Code", "siteCode"),"");
         dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new CalculationResultConverter());
 
 

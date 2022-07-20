@@ -49,7 +49,9 @@ public class SpeedPhasesBaselineVLAtEnrollmentCalculation extends AbstractPatien
         CalculationResultMap ret = new CalculationResultMap();
         for (Integer ptId : cohort) {
             SimpleResult result = null;
-            Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
+            Date enrollmentDate = null;
+            if (hivEnrollmentMap.get(ptId) != null) {
+                enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
 
             ListResult weightObsResult = (ListResult) weightObss.get(ptId);
 
@@ -64,6 +66,7 @@ public class SpeedPhasesBaselineVLAtEnrollmentCalculation extends AbstractPatien
                     }
                 }
             }
+        }
 
             ret.put(ptId, result);
         }

@@ -49,21 +49,22 @@ public class SpeedPhasesWhoStageAtEnrollmentCalculation extends AbstractPatientC
 		CalculationResultMap ret = new CalculationResultMap();
 		for (Integer ptId : cohort) {
 			SimpleResult result = null;
-			Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
-			ListResult whoStageObssResult = (ListResult) whoStageObss.get(ptId);
+			if (hivEnrollmentMap.get(ptId) != null) {
+				Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
+				ListResult whoStageObssResult = (ListResult) whoStageObss.get(ptId);
 
-			if (enrollmentDate != null && whoStageObssResult != null && !whoStageObssResult.isEmpty()) {
-				List<Obs> whoStages = CalculationUtils.extractResultValues(whoStageObssResult);
-				Obs lastBeforeArtStart = EmrCalculationUtils.findLastOnOrBefore(whoStages, enrollmentDate);
+				if (enrollmentDate != null && whoStageObssResult != null && !whoStageObssResult.isEmpty()) {
+					List<Obs> whoStages = CalculationUtils.extractResultValues(whoStageObssResult);
+					Obs lastBeforeArtStart = EmrCalculationUtils.findLastOnOrBefore(whoStages, enrollmentDate);
 
-				if (lastBeforeArtStart != null) {
-					Integer whoStage = EmrUtils.whoStage(lastBeforeArtStart.getValueCoded());
-					if (whoStage != null) {
-						result = new SimpleResult(whoStage, this);
+					if (lastBeforeArtStart != null) {
+						Integer whoStage = EmrUtils.whoStage(lastBeforeArtStart.getValueCoded());
+						if (whoStage != null) {
+							result = new SimpleResult(whoStage, this);
+						}
 					}
 				}
 			}
-
 			ret.put(ptId, result);
 		}
 		return ret;

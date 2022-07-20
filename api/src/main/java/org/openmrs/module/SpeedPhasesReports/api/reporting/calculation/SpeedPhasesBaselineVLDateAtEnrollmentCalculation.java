@@ -49,21 +49,25 @@ public class SpeedPhasesBaselineVLDateAtEnrollmentCalculation extends AbstractPa
         CalculationResultMap ret = new CalculationResultMap();
         for (Integer ptId : cohort) {
             SimpleResult result = null;
-            Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
 
-            ListResult viralLoadObsResult = (ListResult) viralLoadObss.get(ptId);
+            Date enrollmentDate = null;
+            if (hivEnrollmentMap.get(ptId) != null) {
+                enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
 
-            if (enrollmentDate != null && viralLoadObsResult != null && !viralLoadObsResult.isEmpty()) {
-                List<Obs> viralLoad = CalculationUtils.extractResultValues(viralLoadObsResult);
-                Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(viralLoad, enrollmentDate);
-                if (lastBeforeEnrollment != null) {
-                    Date viralLoadValue = lastBeforeEnrollment.getObsDatetime();
-                    if (viralLoadValue != null) {
-                        result = new SimpleResult(viralLoadValue, this);
+                ListResult viralLoadObsResult = (ListResult) viralLoadObss.get(ptId);
+
+                if (enrollmentDate != null && viralLoadObsResult != null && !viralLoadObsResult.isEmpty()) {
+                    List<Obs> viralLoad = CalculationUtils.extractResultValues(viralLoadObsResult);
+                    Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(viralLoad, enrollmentDate);
+                    if (lastBeforeEnrollment != null) {
+                        Date viralLoadValue = lastBeforeEnrollment.getObsDatetime();
+                        if (viralLoadValue != null) {
+                            result = new SimpleResult(viralLoadValue, this);
+                        }
                     }
                 }
-            }
 
+            }
             ret.put(ptId, result);
         }
         return ret;

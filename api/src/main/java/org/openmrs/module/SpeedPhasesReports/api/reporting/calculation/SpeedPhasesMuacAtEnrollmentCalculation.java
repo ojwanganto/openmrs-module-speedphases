@@ -49,22 +49,23 @@ public class SpeedPhasesMuacAtEnrollmentCalculation extends AbstractPatientCalcu
         CalculationResultMap ret = new CalculationResultMap();
         for (Integer ptId : cohort) {
             SimpleResult result = null;
-            Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
+            if (hivEnrollmentMap.get(ptId) != null) {
+                Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
 
-            ListResult weightObsResult = (ListResult) weightObss.get(ptId);
+                ListResult weightObsResult = (ListResult) weightObss.get(ptId);
 
-            if (enrollmentDate != null && weightObsResult != null && !weightObsResult.isEmpty()) {
-                List<Obs> weight = CalculationUtils.extractResultValues(weightObsResult);
-                Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(weight, enrollmentDate);
+                if (enrollmentDate != null && weightObsResult != null && !weightObsResult.isEmpty()) {
+                    List<Obs> weight = CalculationUtils.extractResultValues(weightObsResult);
+                    Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(weight, enrollmentDate);
 
-                if (lastBeforeEnrollment != null) {
-                    Double weightValue = lastBeforeEnrollment.getValueNumeric();
-                    if (weightValue != null) {
-                        result = new SimpleResult(weightValue, this);
+                    if (lastBeforeEnrollment != null) {
+                        Double weightValue = lastBeforeEnrollment.getValueNumeric();
+                        if (weightValue != null) {
+                            result = new SimpleResult(weightValue, this);
+                        }
                     }
                 }
             }
-
             ret.put(ptId, result);
         }
         return ret;

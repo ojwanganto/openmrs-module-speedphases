@@ -2,10 +2,6 @@ package org.openmrs.module.SpeedPhasesReports.api.reporting.converter;
 
 import org.openmrs.module.reporting.data.converter.DataConverter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Converts date element to custom regimen format
  */

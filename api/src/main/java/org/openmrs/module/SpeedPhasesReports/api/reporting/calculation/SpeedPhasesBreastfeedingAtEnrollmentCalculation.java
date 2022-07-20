@@ -49,22 +49,23 @@ public class SpeedPhasesBreastfeedingAtEnrollmentCalculation extends AbstractPat
         CalculationResultMap ret = new CalculationResultMap();
         for (Integer ptId : cohort) {
             SimpleResult result = null;
-            Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
+            if (hivEnrollmentMap.get(ptId) != null) {
+                Date enrollmentDate = ((Encounter) hivEnrollmentMap.get(ptId).getValue()).getEncounterDatetime();
 
-            ListResult weightObsResult = (ListResult) weightObss.get(ptId);
+                ListResult weightObsResult = (ListResult) weightObss.get(ptId);
 
-            if (enrollmentDate != null && weightObsResult != null && !weightObsResult.isEmpty()) {
-                List<Obs> viralLoad = CalculationUtils.extractResultValues(weightObsResult);
-                Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(viralLoad, enrollmentDate);
+                if (enrollmentDate != null && weightObsResult != null && !weightObsResult.isEmpty()) {
+                    List<Obs> viralLoad = CalculationUtils.extractResultValues(weightObsResult);
+                    Obs lastBeforeEnrollment = EmrCalculationUtils.findLastOnOrBefore(viralLoad, enrollmentDate);
 
-                if (lastBeforeEnrollment != null) {
-                    Concept viralLoadValue = lastBeforeEnrollment.getValueCoded();
-                    if (viralLoadValue != null) {
-                        result = new SimpleResult(viralLoadValue, this);
+                    if (lastBeforeEnrollment != null) {
+                        Concept viralLoadValue = lastBeforeEnrollment.getValueCoded();
+                        if (viralLoadValue != null) {
+                            result = new SimpleResult(viralLoadValue, this);
+                        }
                     }
                 }
             }
-
             ret.put(ptId, result);
         }
         return ret;
