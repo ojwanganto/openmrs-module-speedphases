@@ -32,13 +32,14 @@ public class LisheBoraHivVisitCohortQueryEvaluator implements VisitQueryEvaluato
         //List<Integer> cohort = ModuleUtils.getLisheBoraCohort();
         String qry = "select f.visit_id\n" +
                 "from kenyaemr_etl.etl_patient_hiv_followup f\n" +
+                "inner join person p on p.person_id = f.patient_id\n" +
                 "inner join\n" +
                 "(select f.patient_id\n" +
                 " from kenyaemr_etl.etl_hei_follow_up_visit f\n" +
                 "          inner join person p on p.person_id = f.patient_id\n" +
                 "          inner join  kenyaemr_etl.etl_hei_enrollment e on e.patient_id = f.patient_id\n" +
                 " where  f.visit_id is not null and f.visit_date between date(:startDate) and date(:endDate) and datediff(f.visit_date, p.birthdate) div 365.25 between 0 and 2 group by f.patient_id) e on f.patient_id = e.patient_id\n" +
-                "where f.visit_date between date(:startDate) and date(:endDate) and f.next_appointment_date is not null";
+                "where f.visit_date between date(:startDate) and date(:endDate) and f.next_appointment_date is not null and datediff(f.visit_date, p.birthdate) div 365.25 between 0 and 2";
 
         SqlQueryBuilder builder = new SqlQueryBuilder();
 
