@@ -32,11 +32,10 @@ public class SpeedPhasesViralLoadDateDataEvaluator implements VisitDataEvaluator
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, DATE_FORMAT(v.date_started, '%d/%m/%Y') "
-                        + " from visit v "
-                        + " inner join encounter e on e.visit_id = v.visit_id "
-                        + " left outer join obs o on o.encounter_id = e.encounter_id and o.voided=0 "
-                        + " where o.concept_id in(856, 1305) and v.visit_id in(:visitIds) ";
+        String qry = "select v.visit_id, DATE_FORMAT(coalesce(date_test_requested,visit_date), '%d/%m/%Y') as sampleDate\n" +
+                "from visit v\n" +
+                " inner join kenyaemr_etl.etl_laboratory_extract t on date(t.visit_date) = date(v.date_started) and  t.lab_test in (1305, 856)\n" +
+                "where v.visit_id in(:visitIds) ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);

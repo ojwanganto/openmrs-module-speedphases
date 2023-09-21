@@ -31,11 +31,10 @@ public class SpeedPhasesViralLoadDataEvaluator implements VisitDataEvaluator {
         if (visitIds.getSize() == 0) {
             return c;
         }
-        String qry = "select v.visit_id, if(o.concept_id =1305 and o.value_coded=1302, 'LDL', if(o.concept_id=856, o.value_numeric, ''))"
-                        + " from visit v "
-                        + " inner join encounter e on e.visit_id = v.visit_id "
-                        + " left outer join obs o on o.encounter_id = e.encounter_id and o.voided=0 "
-                        + " where o.concept_id in(856, 1305) and v.visit_id in(:visitIds) ";
+        String qry = "select v.visit_id, case lab_test when 1305 then 'LDL' when 856 then test_result else null end as vlResult\n" +
+                "from visit v\n" +
+                " inner join kenyaemr_etl.etl_laboratory_extract t on date(t.visit_date) = date(v.date_started) and  t.lab_test in (1305, 856)\n" +
+                "where v.visit_id in(:visitIds) ";
 
         SqlQueryBuilder queryBuilder = new SqlQueryBuilder();
         queryBuilder.append(qry);
