@@ -86,6 +86,7 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.Speed
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.SpeedPhasesWHOStagingDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.VisitOisDateDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.DartStudyViralLoadCohortDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.query.definition.DartStudyVisitCohortDefinition;
 import org.openmrs.module.kenyacore.report.ReportDescriptor;
 import org.openmrs.module.kenyacore.report.ReportUtils;
@@ -101,6 +102,7 @@ import org.openmrs.module.reporting.data.converter.BirthdateConverter;
 import org.openmrs.module.reporting.data.converter.DataConverter;
 import org.openmrs.module.reporting.data.converter.DateConverter;
 import org.openmrs.module.reporting.data.converter.ObjectFormatter;
+import org.openmrs.module.reporting.data.encounter.definition.EncounterIdDataDefinition;
 import org.openmrs.module.reporting.data.patient.definition.ConvertedPatientDataDefinition;
 import org.openmrs.module.reporting.data.patient.definition.PatientIdDataDefinition;
 import org.openmrs.module.reporting.data.patient.definition.PatientIdentifierDataDefinition;
@@ -110,6 +112,7 @@ import org.openmrs.module.reporting.data.person.definition.GenderDataDefinition;
 import org.openmrs.module.reporting.data.person.definition.PreferredNameDataDefinition;
 import org.openmrs.module.reporting.data.visit.definition.VisitIdDataDefinition;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
+import org.openmrs.module.reporting.dataset.definition.EncounterDataSetDefinition;
 import org.openmrs.module.reporting.dataset.definition.VisitDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -137,7 +140,8 @@ public class DartReportBuilder extends AbstractReportBuilder {
     @Override
     protected List<Mapped<DataSetDefinition>> buildDataSets(ReportDescriptor reportDescriptor, ReportDefinition reportDefinition) {
         return Arrays.asList(
-                ReportUtils.map(datasetColumns(), "startDate=${startDate},endDate=${endDate}")
+                ReportUtils.map(datasetColumns(), "startDate=${startDate},endDate=${endDate}"),
+                ReportUtils.map(vlDatasetColumns(), "startDate=${startDate},endDate=${endDate}")
         );
     }
 
@@ -288,6 +292,38 @@ public class DartReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("evaluationDate", new CalculationDataDefinition("Query Date", new SpeedPhasesQueryDateCalculation()),"", new CalculationResultConverter());
 
         DartStudyVisitCohortDefinition cd = new DartStudyVisitCohortDefinition();
+        cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+        cd.addParameter(new Parameter("endDate", "End Date", Date.class));
+        dsd.addRowFilter(cd, "startDate=${startDate},endDate=${endDate}");
+        return dsd;
+
+    }
+
+    /**
+     * Add viral load dataset
+     * @return
+     */
+    protected DataSetDefinition vlDatasetColumns() {
+        EncounterDataSetDefinition dsd = new EncounterDataSetDefinition();
+        dsd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+        dsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+        dsd.setName("ViralLoadInformation");
+        dsd.setDescription("Viral load information");
+
+        DataConverter nameFormatter = new ObjectFormatter("{familyName}, {givenName}");
+        DataDefinition nameDef = new ConvertedPersonDataDefinition("name", new PreferredNameDataDefinition(), nameFormatter);
+
+
+        PatientIdentifierType upn = MetadataUtils.existing(PatientIdentifierType.class, HivMetadata._PatientIdentifierType.UNIQUE_PATIENT_NUMBER);
+        DataConverter identifierFormatter = new ObjectFormatter("{identifier}");
+        DataDefinition identifierDef = new ConvertedPatientDataDefinition("identifier", new PatientIdentifierDataDefinition(upn.getName(), upn), identifierFormatter);
+
+        dsd.addColumn("Encounter ID", new EncounterIdDataDefinition(), null);
+        dsd.addColumn("id", new PatientIdDataDefinition(), "");
+        dsd.addColumn("Name", nameDef, "");
+        dsd.addColumn("Unique Patient Number", identifierDef, null);
+
+        DartStudyViralLoadCohortDefinition cd = new DartStudyViralLoadCohortDefinition();
         cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
         cd.addParameter(new Parameter("endDate", "End Date", Date.class));
         dsd.addRowFilter(cd, "startDate=${startDate},endDate=${endDate}");
