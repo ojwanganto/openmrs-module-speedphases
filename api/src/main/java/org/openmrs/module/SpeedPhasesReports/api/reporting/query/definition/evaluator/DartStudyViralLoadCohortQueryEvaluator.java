@@ -32,13 +32,18 @@ public class DartStudyViralLoadCohortQueryEvaluator implements EncounterQueryEva
 
         String qry = "select t.encounter_id\n" +
                 "from kenyaemr_etl.etl_laboratory_extract t\n" +
-                "inner join (select v.patient_id, p.birthDate, p.gender\n" +
-                "            from openmrs.person p\n" +
-                "                     inner join openmrs.visit v on p.person_id = v.patient_id\n" +
-                "            where datediff(date(:endDate), p.birthdate) div 365.25 between 0 and 19\n" +
+                "         inner join (\n" +
+                "    select v.visit_id, v.patient_id\n" +
+                "    from patient pt\n" +
+                "             inner join visit v on pt.patient_id = v.patient_id\n" +
+                "             inner join person p on v.patient_id = p.person_id\n" +
+                "             inner join  kenyaemr_etl.etl_hiv_enrollment e on e.patient_id = p.person_id\n" +
+                "    where  date(v.date_started) between date(:startDate) and date(:endDate)\n" +
+                "      and datediff(v.date_started, p.birthdate) div 365.25 between 0 and 19\n" +
+                "    group by v.visit_id\n" +
+                "    having v.visit_id is not null\n" +
                 ") c on c.patient_id = t.patient_id\n" +
-                "inner join kenyaemr_etl.etl_patient_demographics dg on dg.patient_id = t.patient_id\n" +
-                "where t.lab_test in (1305, 856) ";
+                "where t.lab_test in (1305, 856);";
         SqlQueryBuilder builder = new SqlQueryBuilder();
 
         Date startDate = (Date)context.getParameterValue("startDate");
