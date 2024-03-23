@@ -24,6 +24,10 @@ import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.ARTRe
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DCOMDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DiscLastArtDateDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.DiscLastArtDurationDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.EncounterBasedViralLoadDataDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.EncounterBasedViralLoadDateSampleCollectedDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.EncounterBasedViralLoadOrderReasonDefinition;
+import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.EncounterBasedViralLoadResultDateDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.MaritalStatusDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PWPDisclosureDataDefinition;
 import org.openmrs.module.SpeedPhasesReports.api.reporting.definition.data.PatientDiscontinuationDateDataDefinition;
@@ -321,7 +325,14 @@ public class DartReportBuilder extends AbstractReportBuilder {
         dsd.addColumn("Encounter ID", new EncounterIdDataDefinition(), null);
         dsd.addColumn("id", new PatientIdDataDefinition(), "");
         dsd.addColumn("Name", nameDef, "");
+        dsd.addColumn("DOB", new BirthdateDataDefinition(), "", new BirthdateConverter(DATE_FORMAT));
+        dsd.addColumn("Sex", new GenderDataDefinition(), "");
         dsd.addColumn("Unique Patient Number", identifierDef, null);
+        dsd.addColumn("VL Result", new EncounterBasedViralLoadDataDefinition(), null,null);
+        dsd.addColumn("VL Date", new EncounterBasedViralLoadDateSampleCollectedDefinition(), null,null);
+        dsd.addColumn("VL Order Reason", new EncounterBasedViralLoadOrderReasonDefinition(), null,null);
+        dsd.addColumn("VL Result Date", new EncounterBasedViralLoadResultDateDefinition(), null,null);
+
 
         DartStudyViralLoadCohortDefinition cd = new DartStudyViralLoadCohortDefinition();
         cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
